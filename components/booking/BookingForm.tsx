@@ -6,7 +6,6 @@ import { MessageCircle, Mail, AlertCircle, ShieldCheck } from 'lucide-react';
 import { ROOM_CATEGORIES } from '@/data/rooms';
 import { RESORT_CONFIG } from '@/data/resort';
 import {
-  getTodayIsoDate,
   getTomorrowIsoDate,
   validateStayEnquiry,
   validateDiningEnquiry,
@@ -19,6 +18,7 @@ import {
   createWhatsAppUrl,
 } from '@/lib/whatsapp';
 import { resolveRoomDisplayName } from '@/lib/booking';
+import { useClientTodayIso } from '@/hooks/use-client-env';
 import { BookingSummary } from '@/components/booking/BookingSummary';
 import { WhatsAppBooking } from '@/components/booking/WhatsAppBooking';
 import {
@@ -42,8 +42,8 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
 
   const [activeTab, setActiveTab] = useState<EnquiryTab>(initialTab);
 
-  const today = getTodayIsoDate();
-  const tomorrow = getTomorrowIsoDate(today);
+  const clientToday = useClientTodayIso();
+  const clientTomorrow = clientToday ? getTomorrowIsoDate(clientToday) : '';
 
   // Stay Enquiry State (Zero localStorage / sessionStorage persistence for privacy compliance)
   const [stayData, setStayData] = useState<StayEnquiryPayload>(() => {
@@ -57,8 +57,8 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
       guestName: '',
       phone: '',
       email: '',
-      checkIn: qCheckIn || today,
-      checkOut: qCheckOut || tomorrow,
+      checkIn: qCheckIn || '',
+      checkOut: qCheckOut || '',
       adults: qAdults ? Math.max(1, Number(qAdults)) : 2,
       children: qChildren ? Math.max(0, Number(qChildren)) : 0,
       roomCategory: resolveRoomDisplayName(qRoom || defaultRoom),
@@ -70,7 +70,7 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
   const [diningData, setDiningData] = useState<DiningEnquiryPayload>({
     guestName: '',
     phone: '',
-    date: today,
+    date: '',
     time: '19:30',
     guests: 4,
     diningPreference: 'Multi-Cuisine Dining (Veg & Non-Veg)',
@@ -84,9 +84,30 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
     email: '',
     eventCategory: 'Destination Wedding (Up to 2,500+ Guests)',
     expectedGuests: '500',
-    eventDate: tomorrow,
+    eventDate: '',
     requirements: '',
   });
+
+  const effectiveCheckIn = stayData.checkIn || clientToday;
+  const effectiveCheckOut =
+    stayData.checkOut ||
+    (effectiveCheckIn ? getTomorrowIsoDate(effectiveCheckIn) : clientTomorrow);
+
+  const effectiveStayData: StayEnquiryPayload = {
+    ...stayData,
+    checkIn: effectiveCheckIn,
+    checkOut: effectiveCheckOut,
+  };
+
+  const effectiveDiningData: DiningEnquiryPayload = {
+    ...diningData,
+    date: diningData.date || clientToday,
+  };
+
+  const effectiveEventData: EventEnquiryPayload = {
+    ...eventData,
+    eventDate: eventData.eventDate || clientTomorrow,
+  };
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [preparedMessage, setPreparedMessage] = useState<{
@@ -96,8 +117,8 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
   } | null>(null);
 
   const handleStayCheckInChange = (newCheckIn: string) => {
-    let nextCheckOut = stayData.checkOut;
-    if (newCheckIn && stayData.checkOut && new Date(stayData.checkOut) <= new Date(newCheckIn)) {
+    let nextCheckOut = effectiveCheckOut;
+    if (newCheckIn && effectiveCheckOut && new Date(effectiveCheckOut) <= new Date(newCheckIn)) {
       nextCheckOut = getTomorrowIsoDate(newCheckIn);
     }
     setStayData((prev) => ({
@@ -109,51 +130,51 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
 
   const handleStaySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const validation = validateStayEnquiry(stayData);
+    const validation = validateStayEnquiry(effectiveStayData);
     if (!validation.valid) {
       setErrors(validation.errors);
       return;
     }
     setErrors({});
-    const msg = buildStayWhatsAppMessage(stayData);
+    const msg = buildStayWhatsAppMessage(effectiveStayData);
     setPreparedMessage({
-      title: `Stay Enquiry for ${stayData.roomCategory}`,
+      title: `Stay Enquiry for ${effectiveStayData.roomCategory}`,
       message: msg,
-      subject: `Stay Enquiry — ${stayData.roomCategory} (${stayData.checkIn} to ${stayData.checkOut})`,
+      subject: `Stay Enquiry — ${effectiveStayData.roomCategory} (${effectiveStayData.checkIn} to ${effectiveStayData.checkOut})`,
     });
     window.open(createWhatsAppUrl(msg), '_blank', 'noopener,noreferrer');
   };
 
   const handleDiningSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const validation = validateDiningEnquiry(diningData);
+    const validation = validateDiningEnquiry(effectiveDiningData);
     if (!validation.valid) {
       setErrors(validation.errors);
       return;
     }
     setErrors({});
-    const msg = buildDiningWhatsAppMessage(diningData);
+    const msg = buildDiningWhatsAppMessage(effectiveDiningData);
     setPreparedMessage({
       title: `Auric 24×7 Restaurant Reservation Request`,
       message: msg,
-      subject: `Auric 24×7 Dining Enquiry — ${diningData.date} at ${diningData.time}`,
+      subject: `Auric 24×7 Dining Enquiry — ${effectiveDiningData.date} at ${effectiveDiningData.time}`,
     });
     window.open(createWhatsAppUrl(msg), '_blank', 'noopener,noreferrer');
   };
 
   const handleEventSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const validation = validateEventEnquiry(eventData);
+    const validation = validateEventEnquiry(effectiveEventData);
     if (!validation.valid) {
       setErrors(validation.errors);
       return;
     }
     setErrors({});
-    const msg = buildEventWhatsAppMessage(eventData);
+    const msg = buildEventWhatsAppMessage(effectiveEventData);
     setPreparedMessage({
-      title: `${eventData.eventCategory} Proposal Request`,
+      title: `${effectiveEventData.eventCategory} Proposal Request`,
       message: msg,
-      subject: `Event Enquiry — ${eventData.eventCategory} on ${eventData.eventDate}`,
+      subject: `Event Enquiry — ${effectiveEventData.eventCategory} on ${effectiveEventData.eventDate}`,
     });
     window.open(createWhatsAppUrl(msg), '_blank', 'noopener,noreferrer');
   };
@@ -365,9 +386,9 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
                     <input
                       id="stay-checkin"
                       type="date"
-                      min={today}
+                      min={clientToday || undefined}
                       required
-                      value={stayData.checkIn}
+                      value={effectiveStayData.checkIn}
                       onChange={(e) => handleStayCheckInChange(e.target.value)}
                       className="mt-2 w-full border border-[#0E2017]/20 bg-[#F8F6F0] px-4 py-3 font-mono text-sm text-[#0E2017] focus:border-[#0E2017] focus:outline-none"
                     />
@@ -390,9 +411,13 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
                     <input
                       id="stay-checkout"
                       type="date"
-                      min={getTomorrowIsoDate(stayData.checkIn)}
+                      min={
+                        effectiveStayData.checkIn
+                          ? getTomorrowIsoDate(effectiveStayData.checkIn)
+                          : undefined
+                      }
                       required
-                      value={stayData.checkOut}
+                      value={effectiveStayData.checkOut}
                       onChange={(e) =>
                         setStayData({ ...stayData, checkOut: e.target.value })
                       }
@@ -505,7 +530,7 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
               </form>
 
               <div className="lg:col-span-5">
-                <BookingSummary payload={stayData} />
+                <BookingSummary payload={effectiveStayData} />
               </div>
             </div>
           )}
@@ -665,9 +690,9 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
                   <input
                     id="event-date"
                     type="date"
-                    min={today}
+                    min={clientToday || undefined}
                     required
-                    value={eventData.eventDate}
+                    value={effectiveEventData.eventDate}
                     onChange={(e) =>
                       setEventData({ ...eventData, eventDate: e.target.value })
                     }
@@ -816,9 +841,9 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
                   <input
                     id="dining-date"
                     type="date"
-                    min={today}
+                    min={clientToday || undefined}
                     required
-                    value={diningData.date}
+                    value={effectiveDiningData.date}
                     onChange={(e) => setDiningData({ ...diningData, date: e.target.value })}
                     className="mt-2 w-full border border-[#0E2017]/20 bg-[#F8F6F0] px-4 py-3 font-mono text-sm text-[#0E2017] focus:border-[#0E2017] focus:outline-none"
                   />

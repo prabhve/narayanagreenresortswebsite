@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import {
   motion,
   useMotionValueEvent,
-  useReducedMotion,
   useScroll,
 } from 'motion/react';
 import { Menu } from 'lucide-react';
@@ -27,7 +26,6 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollY, scrollYProgress } = useScroll();
-  const prefersReducedMotion = useReducedMotion();
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     const isNowScrolled = latest > 24;
@@ -108,13 +106,11 @@ export function Header() {
         </div>
 
         {/* Hairline Scroll Progress Indicator */}
-        {!prefersReducedMotion && (
-          <motion.div
-            aria-hidden="true"
-            style={{ scaleX: scrollYProgress }}
-            className="h-[2px] w-full origin-left bg-gradient-to-r from-[#8C6D32] via-[#C8A45D] to-[#C8A45D]"
-          />
-        )}
+        <motion.div
+          aria-hidden="true"
+          style={{ scaleX: scrollYProgress }}
+          className="h-[2px] w-full origin-left bg-gradient-to-r from-[#8C6D32] via-[#C8A45D] to-[#C8A45D] motion-reduce:hidden"
+        />
       </header>
 
       <MobileMenu isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />

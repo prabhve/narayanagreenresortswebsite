@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   motion,
-  useReducedMotion,
   useScroll,
   useTransform,
 } from 'motion/react';
@@ -21,9 +20,13 @@ import {
 } from 'lucide-react';
 import { RESORT_CONFIG } from '@/data/resort';
 import { ROOM_CATEGORIES } from '@/data/rooms';
-import { getTodayIsoDate, getTomorrowIsoDate } from '@/lib/validation';
+import { getTomorrowIsoDate } from '@/lib/validation';
 import { buildBookingQueryUrl } from '@/lib/booking';
 import { useIsMobile } from '@/hooks/use-mobile';
+import {
+  useClientTodayIso,
+  useHydratedReducedMotion,
+} from '@/hooks/use-client-env';
 import { Container } from '@/components/ui/Container';
 import { LUXURY_EASE } from '@/components/ui/MotionPrimitives';
 
@@ -33,8 +36,9 @@ export function Hero() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
 
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
   const isMobile = useIsMobile();
+  const clientToday = useClientTodayIso();
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -44,15 +48,16 @@ export function Hero() {
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '12%']);
   const bgOpacity = useTransform(scrollYProgress, [0, 1], [1, 0.72]);
 
-  const today = getTodayIsoDate();
-  const tomorrow = getTomorrowIsoDate(today);
-
-  const [checkIn, setCheckIn] = useState(today);
-  const [checkOut, setCheckOut] = useState(tomorrow);
+  const [checkIn, setCheckIn] = useState('');
+  const [checkOut, setCheckOut] = useState('');
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [roomPreference, setRoomPreference] = useState<string>(ROOM_CATEGORIES[0].slug);
   const [dateError, setDateError] = useState('');
+
+  const effectiveCheckIn = checkIn || clientToday;
+  const effectiveCheckOut =
+    checkOut || (effectiveCheckIn ? getTomorrowIsoDate(effectiveCheckIn) : '');
 
   const toggleVideoPlayback = () => {
     const vid = videoRef.current;
@@ -69,25 +74,25 @@ export function Hero() {
   const handleCheckInChange = (val: string) => {
     setCheckIn(val);
     setDateError('');
-    if (val && checkOut && new Date(checkOut) <= new Date(val)) {
+    if (val && effectiveCheckOut && new Date(effectiveCheckOut) <= new Date(val)) {
       setCheckOut(getTomorrowIsoDate(val));
     }
   };
 
   const handleWidgetSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!checkIn || !checkOut) {
+    if (!effectiveCheckIn || !effectiveCheckOut) {
       setDateError('Please select both check-in and check-out dates.');
       return;
     }
-    if (new Date(checkOut) <= new Date(checkIn)) {
+    if (new Date(effectiveCheckOut) <= new Date(effectiveCheckIn)) {
       setDateError('Check-out must be later than check-in.');
       return;
     }
     setDateError('');
     const targetUrl = buildBookingQueryUrl({
-      checkIn,
-      checkOut,
+      checkIn: effectiveCheckIn,
+      checkOut: effectiveCheckOut,
       adults,
       children,
       room: roomPreference,
@@ -237,17 +242,15 @@ export function Hero() {
           >
             <span className="[writing-mode:vertical-rl]">Scroll to Explore</span>
             <span className="relative flex h-12 w-px overflow-hidden bg-[#F8F6F0]/25" aria-hidden="true">
-              {!prefersReducedMotion && (
-                <motion.span
-                  animate={{ y: ['-100%', '100%'] }}
-                  transition={{
-                    duration: 1.8,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
-                  className="h-1/2 w-full bg-[#C8A45D]"
-                />
-              )}
+              <motion.span
+                animate={{ y: ['-100%', '100%'] }}
+                transition={{
+                  duration: 1.8,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                className="h-1/2 w-full bg-[#C8A45D] motion-reduce:hidden"
+              />
             </span>
             <ChevronDown className="h-3.5 w-3.5 text-[#C8A45D]" />
           </motion.a>
@@ -279,8 +282,8 @@ export function Hero() {
                 <input
                   id="hero-checkin"
                   type="date"
-                  min={today}
-                  value={checkIn}
+                  min={clientToday || undefined}
+                  value={effectiveCheckIn}
                   onChange={(e) => handleCheckInChange(e.target.value)}
                   className="mt-1.5 w-full border border-[#F8F6F0]/20 bg-[#183827]/70 px-3.5 py-2.5 font-mono text-xs text-[#F8F6F0] focus:border-[#C8A45D] focus:outline-none"
                 />
@@ -298,8 +301,8 @@ export function Hero() {
                 <input
                   id="hero-checkout"
                   type="date"
-                  min={getTomorrowIsoDate(checkIn)}
-                  value={checkOut}
+                  min={effectiveCheckIn ? getTomorrowIsoDate(effectiveCheckIn) : undefined}
+                  value={effectiveCheckOut}
                   onChange={(e) => {
                     setCheckOut(e.target.value);
                     setDateError('');

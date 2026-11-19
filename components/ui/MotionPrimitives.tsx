@@ -5,12 +5,12 @@ import {
   AnimatePresence,
   motion,
   useMotionValueEvent,
-  useReducedMotion,
   useScroll,
   useTransform,
 } from 'motion/react';
 import { ArrowUp } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useHydratedReducedMotion } from '@/hooks/use-client-env';
 import { cn } from '@/lib/utils';
 
 export const LUXURY_EASE = [0.16, 1, 0.3, 1] as const;
@@ -42,23 +42,21 @@ export function ClipReveal({
   duration = 0.85,
   scaleFrom = 1.07,
 }: ClipRevealProps) {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
   const isMobile = useIsMobile();
-
-  if (prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
-  }
 
   return (
     <motion.div
       initial={
-        isMobile
-          ? { opacity: 0, y: 12 }
-          : {
-              opacity: 0,
-              clipPath: CLIP_INITIAL_MAP[direction],
-              scale: scaleFrom,
-            }
+        prefersReducedMotion
+          ? false
+          : isMobile
+            ? { opacity: 0, y: 12 }
+            : {
+                opacity: 0,
+                clipPath: CLIP_INITIAL_MAP[direction],
+                scale: scaleFrom,
+              }
       }
       whileInView={
         isMobile
@@ -70,11 +68,15 @@ export function ClipReveal({
             }
       }
       viewport={{ once: true, amount: 0.1 }}
-      transition={{
-        duration: isMobile ? 0.55 : duration,
-        delay: delay / 1000,
-        ease: LUXURY_EASE,
-      }}
+      transition={
+        prefersReducedMotion
+          ? { duration: 0 }
+          : {
+              duration: isMobile ? 0.55 : duration,
+              delay: delay / 1000,
+              ease: LUXURY_EASE,
+            }
+      }
       className={cn('transform-gpu will-change-[opacity,transform]', className)}
     >
       {children}
@@ -96,7 +98,7 @@ export function ParallaxMedia({
   scaleRange = [1.08, 1.08],
 }: ParallaxMediaProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
   const isMobile = useIsMobile();
 
   const { scrollYProgress } = useScroll({
@@ -118,16 +120,12 @@ export function ParallaxMedia({
         className
       )}
     >
-      {disableParallax ? (
-        <div className="h-full w-full">{children}</div>
-      ) : (
-        <motion.div
-          style={{ y, scale }}
-          className="h-full w-full transform-gpu will-change-transform"
-        >
-          {children}
-        </motion.div>
-      )}
+      <motion.div
+        style={disableParallax ? undefined : { y, scale }}
+        className="h-full w-full transform-gpu will-change-transform"
+      >
+        {children}
+      </motion.div>
     </div>
   );
 }
@@ -135,7 +133,7 @@ export function ParallaxMedia({
 export function BackToTopButton() {
   const [visible, setVisible] = useState(false);
   const { scrollY } = useScroll();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     const nextVisible = latest > 480;

@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { GalleryItem } from '@/types/resort';
 import { LUXURY_EASE } from '@/components/ui/MotionPrimitives';
+import { useHydratedReducedMotion } from '@/hooks/use-client-env';
 
 interface LightboxProps {
   items: GalleryItem[];
@@ -21,7 +22,7 @@ export function Lightbox({
 }: LightboxProps) {
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [direction, setDirection] = useState<1 | -1>(1);
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
 
   const goPrev = useCallback(() => {
     if (currentIndex === null || items.length === 0) return;

@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 import { Expand } from 'lucide-react';
 import { GALLERY_ITEMS } from '@/data/amenities';
 import { GalleryCategory } from '@/types/resort';
 import { Lightbox } from '@/components/gallery/Lightbox';
 import { LUXURY_EASE } from '@/components/ui/MotionPrimitives';
+import { useHydratedReducedMotion } from '@/hooks/use-client-env';
 
 const CATEGORIES: GalleryCategory[] = [
   'All',
@@ -28,7 +29,7 @@ export function ImageGallery({ initialCategory = 'All', limit }: ImageGalleryPro
   const [selectedCategory, setSelectedCategory] =
     useState<GalleryCategory>(initialCategory);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
 
   const filteredItems = useMemo(() => {
     const list =

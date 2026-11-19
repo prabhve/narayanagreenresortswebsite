@@ -6,7 +6,7 @@ import { ROOM_CATEGORIES } from '@/data/rooms';
 import { Container } from '@/components/ui/Container';
 
 export function Footer() {
-  const currentYear = new Date().getFullYear();
+  const currentYear = new Date().getUTCFullYear();
 
   return (
     <footer className="border-t border-[#F8F6F0]/10 bg-[#0E2017] text-[#F8F6F0]">
