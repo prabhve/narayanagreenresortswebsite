@@ -13,7 +13,6 @@ export const RESORT_CONFIG = {
     street: 'Karmauni, Anuradhi',
     locality: 'Near Bodh Gaya',
     region: 'Bihar',
-    postalCode: '823001',
     country: 'India',
     full: 'Karmauni, Anuradhi, Near Bodh Gaya, Bihar, India',
   },

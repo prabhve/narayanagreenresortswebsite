@@ -21,6 +21,7 @@ import { resolveRoomDisplayName } from '@/lib/booking';
 import { useClientTodayIso } from '@/hooks/use-client-env';
 import { BookingSummary } from '@/components/booking/BookingSummary';
 import { WhatsAppBooking } from '@/components/booking/WhatsAppBooking';
+import { trackConversionEvent } from '@/lib/analytics';
 import {
   StayEnquiryPayload,
   DiningEnquiryPayload,
@@ -142,6 +143,11 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
       message: msg,
       subject: `Stay Enquiry — ${effectiveStayData.roomCategory} (${effectiveStayData.checkIn} to ${effectiveStayData.checkOut})`,
     });
+    trackConversionEvent('booking_enquiry_submitted', {
+      enquiry_type: 'stay',
+      room_category: effectiveStayData.roomCategory,
+      adults: effectiveStayData.adults,
+    });
     window.open(createWhatsAppUrl(msg), '_blank', 'noopener,noreferrer');
   };
 
@@ -158,6 +164,11 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
       title: `Auric 24×7 Restaurant Reservation Request`,
       message: msg,
       subject: `Auric 24×7 Dining Enquiry — ${effectiveDiningData.date} at ${effectiveDiningData.time}`,
+    });
+    trackConversionEvent('booking_enquiry_submitted', {
+      enquiry_type: 'dining',
+      dining_preference: effectiveDiningData.diningPreference,
+      guests: effectiveDiningData.guests,
     });
     window.open(createWhatsAppUrl(msg), '_blank', 'noopener,noreferrer');
   };
@@ -176,6 +187,15 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
       message: msg,
       subject: `Event Enquiry — ${effectiveEventData.eventCategory} on ${effectiveEventData.eventDate}`,
     });
+    const isCorporate = effectiveEventData.eventCategory.toLowerCase().includes('corporate');
+    trackConversionEvent(
+      isCorporate ? 'corporate_event_enquiry' : 'wedding_proposal_enquiry',
+      {
+        enquiry_type: 'event',
+        event_category: effectiveEventData.eventCategory,
+        expected_guests: effectiveEventData.expectedGuests,
+      }
+    );
     window.open(createWhatsAppUrl(msg), '_blank', 'noopener,noreferrer');
   };
 
@@ -183,7 +203,7 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
     <div id="booking-enquiry" className="scroll-mt-24">
       {/* Interactive Mode Selector Tabs */}
       <div
-        className="mb-8 flex flex-wrap border-b border-[#0E2017]/15"
+        className="mb-10 flex flex-wrap gap-x-8 gap-y-2 border-b border-[#0E2017]/10"
         role="tablist"
         aria-label="Enquiry Category Selector"
       >
@@ -196,10 +216,10 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
             setErrors({});
             setPreparedMessage(null);
           }}
-          className={`px-6 py-3.5 text-xs font-semibold tracking-[0.16em] uppercase whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+          className={`pb-4 text-[11px] font-medium tracking-[0.18em] uppercase whitespace-nowrap shrink-0 transition-all duration-300 cursor-pointer ${
             activeTab === 'stay'
-              ? 'border-b-2 border-[#0E2017] bg-[#0E2017] text-[#F8F6F0]'
-              : 'text-[#4A554E] hover:text-[#0E2017]'
+              ? 'border-b-[1.5px] border-[#0E2017] text-[#0E2017]'
+              : 'text-[#4A554E]/75 hover:text-[#0E2017]'
           }`}
         >
           01. Room & Stay Enquiry
@@ -214,10 +234,10 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
             setErrors({});
             setPreparedMessage(null);
           }}
-          className={`px-6 py-3.5 text-xs font-semibold tracking-[0.16em] uppercase whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+          className={`pb-4 text-[11px] font-medium tracking-[0.18em] uppercase whitespace-nowrap shrink-0 transition-all duration-300 cursor-pointer ${
             activeTab === 'event'
-              ? 'border-b-2 border-[#0E2017] bg-[#0E2017] text-[#F8F6F0]'
-              : 'text-[#4A554E] hover:text-[#0E2017]'
+              ? 'border-b-[1.5px] border-[#0E2017] text-[#0E2017]'
+              : 'text-[#4A554E]/75 hover:text-[#0E2017]'
           }`}
         >
           02. Weddings & Corporate Events
@@ -232,10 +252,10 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
             setErrors({});
             setPreparedMessage(null);
           }}
-          className={`px-6 py-3.5 text-xs font-semibold tracking-[0.16em] uppercase whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+          className={`pb-4 text-[11px] font-medium tracking-[0.18em] uppercase whitespace-nowrap shrink-0 transition-all duration-300 cursor-pointer ${
             activeTab === 'dining'
-              ? 'border-b-2 border-[#0E2017] bg-[#0E2017] text-[#F8F6F0]'
-              : 'text-[#4A554E] hover:text-[#0E2017]'
+              ? 'border-b-[1.5px] border-[#0E2017] text-[#0E2017]'
+              : 'text-[#4A554E]/75 hover:text-[#0E2017]'
           }`}
         >
           03. Auric 24×7 Table Reservation
@@ -257,13 +277,13 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
               <form
                 onSubmit={handleStaySubmit}
                 noValidate
-                className="border border-[#0E2017]/15 bg-[#FFFFFF] p-6 sm:p-8 lg:col-span-7"
+                className="border border-[#0E2017]/10 bg-[#FFFFFF] p-7 sm:p-10 lg:col-span-7"
               >
-                <div className="border-b border-[#0E2017]/10 pb-4">
-                  <p className="text-xs font-semibold tracking-[0.2em] text-[#8C6D32] uppercase">
+                <div className="border-b border-[#0E2017]/10 pb-5">
+                  <p className="text-[10px] font-medium tracking-[0.22em] text-[#8C6D32] uppercase">
                     19 Verified Accommodations
                   </p>
-                  <h3 className="mt-1 font-serif text-2xl font-medium text-[#0E2017]">
+                  <h3 className="mt-1.5 font-serif text-2xl font-normal text-[#0E2017] sm:text-3xl">
                     Request Stay Availability & Package Tariffs
                   </h3>
                 </div>
@@ -540,13 +560,13 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
             <form
               onSubmit={handleEventSubmit}
               noValidate
-              className="border border-[#0E2017]/15 bg-[#FFFFFF] p-6 sm:p-8"
+              className="border border-[#0E2017]/10 bg-[#FFFFFF] p-7 sm:p-10"
             >
-              <div className="border-b border-[#0E2017]/10 pb-4">
-                <p className="text-xs font-semibold tracking-[0.2em] text-[#8C6D32] uppercase">
+              <div className="border-b border-[#0E2017]/10 pb-5">
+                <p className="text-[10px] font-medium tracking-[0.22em] text-[#8C6D32] uppercase">
                   2,500+ Wedding Capacity · 3,000+ Corporate Capacity · 100+ Min Event Size
                 </p>
-                <h3 className="mt-1 font-serif text-2xl font-medium text-[#0E2017]">
+                <h3 className="mt-1.5 font-serif text-2xl font-normal text-[#0E2017] sm:text-3xl">
                   Request a Custom Wedding or Corporate Event Proposal
                 </h3>
               </div>
@@ -743,13 +763,13 @@ export function BookingForm({ defaultTab = 'stay', defaultRoom }: BookingFormPro
             <form
               onSubmit={handleDiningSubmit}
               noValidate
-              className="border border-[#0E2017]/15 bg-[#FFFFFF] p-6 sm:p-8"
+              className="border border-[#0E2017]/10 bg-[#FFFFFF] p-7 sm:p-10"
             >
-              <div className="border-b border-[#0E2017]/10 pb-4">
-                <p className="text-xs font-semibold tracking-[0.2em] text-[#8C6D32] uppercase">
+              <div className="border-b border-[#0E2017]/10 pb-5">
+                <p className="text-[10px] font-medium tracking-[0.22em] text-[#8C6D32] uppercase">
                   Auric 24×7 Restaurant · Maharaj Magadh Thali · Poolside Snacks
                 </p>
-                <h3 className="mt-1 font-serif text-2xl font-medium text-[#0E2017]">
+                <h3 className="mt-1.5 font-serif text-2xl font-normal text-[#0E2017] sm:text-3xl">
                   Reserve a Table or Enquire About Dining
                 </h3>
               </div>

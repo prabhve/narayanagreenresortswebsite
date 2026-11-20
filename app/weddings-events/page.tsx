@@ -1,32 +1,58 @@
 import React, { Suspense } from 'react';
-import { MessageCircle, Phone, Users, Check } from 'lucide-react';
+import Link from 'next/link';
+import { MessageCircle, Phone, Check } from 'lucide-react';
 import { RESORT_CONFIG } from '@/data/resort';
-import { constructPageMetadata } from '@/lib/seo';
+import { getFaqsByCategories } from '@/data/seo-faqs';
+import { constructPageMetadata, getWebPageJsonLd } from '@/lib/seo';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { BookingForm } from '@/components/booking/BookingForm';
 import { Reveal } from '@/components/ui/Reveal';
 import { ClipReveal, ParallaxMedia } from '@/components/ui/MotionPrimitives';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { ResortFAQSection } from '@/components/seo/ResortFAQSection';
 
 export const metadata = constructPageMetadata({
   title: 'Destination Weddings & Corporate Events Near Bodh Gaya | Narayana Green Resorts',
   description:
-    'Host grand destination weddings (2,500+ guest capacity) and corporate conferences (3,000+ guest capacity) on the expansive manicured lawns of Narayana Green Resorts near Bodh Gaya.',
+    'Host grand destination weddings (2,500+ guest capacity), corporate conferences (3,000+ guest capacity), and family celebrations (100+ minimum event size) on the expansive manicured lawns of Narayana Green Resorts near Bodh Gaya.',
   path: '/weddings-events',
   image: '/media/weddings/grand-wedding-lawn.jpeg',
+  keywords: [
+    'destination wedding resort in Bodh Gaya',
+    'wedding lawn in Bodh Gaya Bihar',
+    'corporate event venue near Gaya Bihar',
+    'conference venue in Bodh Gaya',
+    'marriage resort near Gaya',
+  ],
 });
 
 export default function WeddingsEventsPage() {
   const { weddingsAndEvents } = RESORT_CONFIG;
+  const pageJsonLd = getWebPageJsonLd({
+    title: 'Destination Weddings & Corporate Events Near Bodh Gaya | Narayana Green Resorts',
+    description: weddingsAndEvents.description,
+    path: '/weddings-events',
+  });
+  const eventFaqs = getFaqsByCategories(['events', 'stay', 'dining'], 6);
 
   return (
     <div className="bg-[#F8F6F0]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(pageJsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
+
       {/* Page Hero */}
       <section className="relative overflow-hidden border-b border-[#F8F6F0]/10 bg-[#0E2017] py-20 text-[#F8F6F0] lg:py-28">
         <ParallaxMedia offset={24} scaleRange={[1.1, 1.02]} className="absolute inset-0 z-0 opacity-35">
           <img
             src="/media/weddings/grand-wedding-lawn.jpeg"
             alt="Grand wedding lawn at Narayana Green Resorts near Bodh Gaya"
+            width={1600}
+            height={1000}
             referrerPolicy="no-referrer"
             className="h-full w-full object-cover"
           />
@@ -38,17 +64,23 @@ export default function WeddingsEventsPage() {
 
         <Container className="relative z-10">
           <Reveal delay={0}>
+            <Breadcrumbs
+              variant="light"
+              className="mb-6"
+              items={[{ name: 'Weddings & Corporate Events', path: '/weddings-events' }]}
+            />
+
             <div className="max-w-3xl">
-              <div className="flex flex-wrap items-center gap-3 text-xs font-semibold tracking-[0.22em] text-[#C8A45D] uppercase">
-                <span className="h-px w-8 bg-[#C8A45D]" aria-hidden="true" />
+              <div className="flex flex-wrap items-center gap-3.5 text-[11px] font-medium tracking-[0.24em] text-[#C8A45D] uppercase">
+                <span className="h-px w-9 bg-[#C8A45D]/70" aria-hidden="true" />
                 <span>{weddingsAndEvents.eyebrow}</span>
               </div>
 
-              <h1 className="mt-4 font-serif text-4xl leading-[1.12] font-medium tracking-tight text-[#F8F6F0] [text-wrap:balance] sm:text-5xl lg:text-6xl">
+              <h1 className="mt-5 font-serif text-4xl leading-[1.1] font-normal tracking-tight text-[#F8F6F0] [text-wrap:balance] sm:text-5xl lg:text-6xl">
                 {weddingsAndEvents.headline}
               </h1>
 
-              <p className="mt-5 max-w-2xl text-base leading-relaxed text-[#F8F6F0]/80 sm:text-lg">
+              <p className="mt-6 max-w-2xl text-[15px] leading-[1.8] font-light text-[#F8F6F0]/80 sm:text-[17px]">
                 {weddingsAndEvents.description}
               </p>
 
@@ -75,22 +107,22 @@ export default function WeddingsEventsPage() {
       </section>
 
       {/* Published Capacity Strip */}
-      <section className="border-b border-[#0E2017]/12 bg-[#EFECE3] py-12">
+      <section className="border-b border-[#0E2017]/10 bg-[#EFECE3] py-12">
         <Container>
           <Reveal delay={0}>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-              {weddingsAndEvents.capacities.map((cap) => (
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 sm:divide-x sm:divide-[#0E2017]/10">
+              {weddingsAndEvents.capacities.map((cap, idx) => (
                 <div
                   key={cap.label}
-                  className="border border-[#0E2017]/15 bg-[#FFFFFF] p-7"
+                  className={idx === 0 ? 'sm:pr-8' : idx === 1 ? 'sm:px-8' : 'sm:pl-8'}
                 >
-                  <p className="font-serif text-4xl font-medium text-[#0E2017] tabular-nums">
+                  <p className="font-serif text-4xl font-normal text-[#0E2017] tabular-nums sm:text-5xl">
                     {cap.figure}
                   </p>
-                  <p className="mt-2 text-xs font-semibold tracking-[0.16em] text-[#8C6D32] uppercase">
+                  <p className="mt-2 text-[11px] font-medium tracking-[0.2em] text-[#8C6D32] uppercase">
                     {cap.label}
                   </p>
-                  <p className="mt-2 text-sm text-[#4A554E]">{cap.context}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-[#4A554E]">{cap.context}</p>
                 </div>
               ))}
             </div>
@@ -122,6 +154,8 @@ export default function WeddingsEventsPage() {
                           <img
                             src={cat.image}
                             alt={cat.title}
+                            width={900}
+                            height={506}
                             loading="lazy"
                             referrerPolicy="no-referrer"
                             className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
@@ -166,6 +200,21 @@ export default function WeddingsEventsPage() {
                   <h3 className="mt-2 font-serif text-3xl font-medium text-[#F8F6F0]">
                     Everything Your Guests Need on One Verdant Estate
                   </h3>
+                  <p className="mt-3 text-xs text-[#F8F6F0]/70">
+                    Explore our{' '}
+                    <Link href="/stay" className="text-[#C8A45D] underline">
+                      19 accommodations
+                    </Link>
+                    ,{' '}
+                    <Link href="/dining" className="text-[#C8A45D] underline">
+                      Auric 24×7 catering
+                    </Link>
+                    , and{' '}
+                    <Link href="/policies" className="text-[#C8A45D] underline">
+                      event booking policies
+                    </Link>
+                    .
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-7">
@@ -189,6 +238,14 @@ export default function WeddingsEventsPage() {
           </Reveal>
         </Container>
       </section>
+
+      {/* Crawlable AEO FAQ Section for Weddings & Events */}
+      <ResortFAQSection
+        faqs={eventFaqs}
+        eyebrow="Destination Weddings & Corporate Events Q&A"
+        title="Questions About Hosting Weddings, Receptions & Corporate Conferences Near Bodh Gaya"
+        subtitle="Verified answers regarding our 2,500+ wedding guest capacity, 3,000+ corporate guest capacity, 19 on-site rooms, and bespoke banquet catering."
+      />
 
       {/* Dedicated Event Enquiry System */}
       <section id="event-enquiry" className="scroll-mt-20 bg-[#EFECE3] py-16 lg:py-24">

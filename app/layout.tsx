@@ -6,12 +6,14 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MobileStickyCTA } from '@/components/layout/MobileStickyCTA';
 import { PageTransition } from '@/components/layout/PageTransition';
+import { MotionProvider } from '@/components/layout/MotionProvider';
 import { BackToTopButton } from '@/components/ui/MotionPrimitives';
+import { AnalyticsScripts } from '@/components/seo/AnalyticsScripts';
 import { constructPageMetadata, getLodgingStructuredData } from '@/lib/seo';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
-  weight: ['500', '600', '700'],
+  weight: ['400', '500', '600', '700'],
   style: ['normal', 'italic'],
   variable: '--font-serif',
   display: 'swap',
@@ -19,7 +21,7 @@ const cormorant = Cormorant_Garamond({
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600'],
   variable: '--font-sans',
   display: 'swap',
 });
@@ -32,9 +34,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = constructPageMetadata({
-  title: 'Narayana Green Resorts — Bodh Gaya Luxury Resort & Weddings',
+  title: 'Narayana Green Resorts — Bodh Gaya Luxury Resort, Dining & Weddings',
   description:
-    'Escape to Green. Stay in Comfort. Celebrate in Style. Discover a peaceful luxury retreat near sacred Bodh Gaya featuring 19 suites, cottages & view rooms, Auric 24×7 multi-cuisine dining, swimming pool, and grand wedding & corporate lawns.',
+    'Escape to Green. Stay in Comfort. Celebrate in Style. Discover a peaceful luxury retreat in Karmauni, Anuradhi, near Bodh Gaya featuring 19 suites, cottages & view rooms, Auric 24×7 multi-cuisine dining, swimming pool, and grand wedding & corporate lawns.',
   path: '/',
 });
 
@@ -54,19 +56,22 @@ export default function RootLayout({
         suppressHydrationWarning
         className="min-h-screen bg-[#F8F6F0] pb-13 font-sans text-[#16211B] antialiased selection:bg-[#C8A45D] selection:text-[#0E2017] lg:pb-0"
       >
+        <AnalyticsScripts />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
           }}
         />
-        <Header />
-        <main className="min-h-[calc(100vh-5rem)]">
-          <PageTransition>{children}</PageTransition>
-        </main>
-        <Footer />
-        <BackToTopButton />
-        <MobileStickyCTA />
+        <MotionProvider>
+          <Header />
+          <main className="min-h-[calc(100vh-5rem)]">
+            <PageTransition>{children}</PageTransition>
+          </main>
+          <Footer />
+          <BackToTopButton />
+          <MobileStickyCTA />
+        </MotionProvider>
       </body>
     </html>
   );

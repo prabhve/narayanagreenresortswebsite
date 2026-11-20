@@ -4,6 +4,7 @@ import React from 'react';
 import { MessageCircle, Mail, Phone, CheckCircle2 } from 'lucide-react';
 import { RESORT_CONFIG } from '@/data/resort';
 import { createMailtoUrl, createWhatsAppUrl } from '@/lib/whatsapp';
+import { trackConversionEvent } from '@/lib/analytics';
 
 interface WhatsAppBookingProps {
   title: string;
@@ -54,6 +55,9 @@ export function WhatsAppBooking({
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() =>
+            trackConversionEvent('whatsapp_enquiry_clicked', { enquiry_title: title })
+          }
           className="inline-flex items-center justify-center gap-2.5 bg-[#0E2017] px-6 py-4 text-xs font-semibold tracking-[0.14em] text-[#F8F6F0] uppercase transition-colors hover:bg-[#183827]"
         >
           <MessageCircle className="h-4 w-4 text-[#C8A45D]" />
@@ -62,6 +66,9 @@ export function WhatsAppBooking({
 
         <a
           href={mailtoUrl}
+          onClick={() =>
+            trackConversionEvent('email_enquiry_clicked', { enquiry_title: title })
+          }
           className="inline-flex items-center justify-center gap-2.5 border border-[#0E2017]/25 bg-transparent px-6 py-4 text-xs font-semibold tracking-[0.14em] text-[#0E2017] uppercase transition-colors hover:border-[#0E2017] hover:bg-[#0E2017]/5"
         >
           <Mail className="h-4 w-4 text-[#8C6D32]" />
@@ -72,6 +79,9 @@ export function WhatsAppBooking({
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[#0E2017]/10 pt-4 text-xs text-[#4A554E]">
         <a
           href={RESORT_CONFIG.contact.phoneHref}
+          onClick={() =>
+            trackConversionEvent('phone_number_clicked', { location: 'whatsapp_booking_panel' })
+          }
           className="inline-flex items-center gap-1.5 font-medium text-[#0E2017] hover:underline"
         >
           <Phone className="h-3.5 w-3.5 text-[#8C6D32]" />

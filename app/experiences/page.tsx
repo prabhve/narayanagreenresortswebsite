@@ -1,13 +1,17 @@
 import React from 'react';
 import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
 import { RESORT_AMENITIES } from '@/data/amenities';
 import { NEARBY_DESTINATIONS } from '@/data/destinations';
 import { RESORT_CONFIG } from '@/data/resort';
-import { constructPageMetadata } from '@/lib/seo';
+import { getFaqsByCategories } from '@/data/seo-faqs';
+import { constructPageMetadata, getWebPageJsonLd } from '@/lib/seo';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/ui/Reveal';
 import { ClipReveal, ParallaxMedia } from '@/components/ui/MotionPrimitives';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { ResortFAQSection } from '@/components/seo/ResortFAQSection';
 
 export const metadata = constructPageMetadata({
   title: 'Resort Experiences, Pool, Meditation & Bodh Gaya Landmarks | Narayana Green Resorts',
@@ -15,17 +19,42 @@ export const metadata = constructPageMetadata({
     'Explore verified resort facilities at Narayana Green Resorts: outdoor Swimming Pool, Kids Pool, Kids Play Area, Meditation Space, Fishing Experience, Maharaj Magadh Thali, and sacred landmarks near Bodh Gaya.',
   path: '/experiences',
   image: '/media/amenities/swimming-pool.jpeg',
+  keywords: [
+    'resort with swimming pool in Bodh Gaya',
+    'meditation resort in Bodh Gaya',
+    'family resort with kids play area Bodh Gaya',
+    'fishing experience resort Bihar',
+    'Narayana Green Resorts amenities',
+  ],
 });
 
 export default function ExperiencesPage() {
+  const pageJsonLd = getWebPageJsonLd({
+    title: 'Resort Experiences, Pool, Meditation & Bodh Gaya Landmarks | Narayana Green Resorts',
+    description:
+      'Explore verified resort facilities at Narayana Green Resorts: outdoor Swimming Pool, Kids Pool, Kids Play Area, Meditation Space, Fishing Experience, Maharaj Magadh Thali, and sacred landmarks near Bodh Gaya.',
+    path: '/experiences',
+  });
+
+  const experienceFaqs = getFaqsByCategories(['experiences', 'location'], 6);
+
   return (
     <div className="bg-[#F8F6F0]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(pageJsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
+
       {/* Page Hero */}
       <section className="relative overflow-hidden border-b border-[#F8F6F0]/10 bg-[#0E2017] py-20 text-[#F8F6F0] lg:py-28">
         <ParallaxMedia offset={24} className="absolute inset-0 z-0 opacity-35">
           <img
             src="/media/amenities/swimming-pool.jpeg"
-            alt="Outdoor Swimming Pool at Narayana Green Resorts"
+            alt="Outdoor Swimming Pool at Narayana Green Resorts near Bodh Gaya"
+            width={1600}
+            height={1000}
             referrerPolicy="no-referrer"
             className="h-full w-full object-cover"
           />
@@ -37,17 +66,23 @@ export default function ExperiencesPage() {
 
         <Container className="relative z-10">
           <Reveal delay={0}>
+            <Breadcrumbs
+              variant="light"
+              className="mb-6"
+              items={[{ name: 'Experiences & Pool', path: '/experiences' }]}
+            />
+
             <div className="max-w-3xl">
-              <div className="flex flex-wrap items-center gap-3 text-xs font-semibold tracking-[0.22em] text-[#C8A45D] uppercase">
-                <span className="h-px w-8 bg-[#C8A45D]" aria-hidden="true" />
+              <div className="flex flex-wrap items-center gap-3.5 text-[11px] font-medium tracking-[0.24em] text-[#C8A45D] uppercase">
+                <span className="h-px w-9 bg-[#C8A45D]/70" aria-hidden="true" />
                 <span>On-Property Leisure & Sacred Proximity</span>
               </div>
 
-              <h1 className="mt-4 font-serif text-4xl leading-[1.12] font-medium tracking-tight text-[#F8F6F0] [text-wrap:balance] sm:text-5xl lg:text-6xl">
+              <h1 className="mt-5 font-serif text-4xl leading-[1.1] font-normal tracking-tight text-[#F8F6F0] [text-wrap:balance] sm:text-5xl lg:text-6xl">
                 Aquatic Leisure, Mindfulness & Heritage Discovery
               </h1>
 
-              <p className="mt-5 max-w-2xl text-base leading-relaxed text-[#F8F6F0]/80 sm:text-lg">
+              <p className="mt-6 max-w-2xl text-[15px] leading-[1.8] font-light text-[#F8F6F0]/80 sm:text-[17px]">
                 From refreshing mornings in our outdoor Swimming Pool and quiet contemplation
                 in the Meditation Space to exploring UNESCO World Heritage sites in nearby
                 Bodh Gaya, every day at {RESORT_CONFIG.name} moves at your rhythm.
@@ -64,7 +99,7 @@ export default function ExperiencesPage() {
             <SectionHeading
               eyebrow="On-Property Amenities"
               title="Verified Facilities & Recreational Spaces"
-              description="Every amenity showcased below is an authentic on-property experience at Narayana Green Resorts."
+              description="Every amenity showcased below is an authentic on-property experience at Narayana Green Resorts in Karmauni, Anuradhi, near Bodh Gaya."
             />
           </Reveal>
 
@@ -80,6 +115,8 @@ export default function ExperiencesPage() {
                         <img
                           src={item.image}
                           alt={item.alt}
+                          width={900}
+                          height={560}
                           loading="lazy"
                           referrerPolicy="no-referrer"
                           className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
@@ -118,16 +155,25 @@ export default function ExperiencesPage() {
       <section className="bg-[#EFECE3] py-16 lg:py-24">
         <Container>
           <Reveal delay={0}>
-            <SectionHeading
-              eyebrow="Spiritual Proximity"
-              title="Landmarks Near Bodh Gaya & Gaya"
-              description="Explore sacred temples, monasteries, and museums from the peaceful base of Narayana Green Resorts in Karmauni, Anuradhi."
-            />
+            <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+              <SectionHeading
+                eyebrow="Spiritual Proximity"
+                title="Landmarks Near Bodh Gaya & Gaya"
+                description="Explore sacred temples, monasteries, and museums from the peaceful base of Narayana Green Resorts in Karmauni, Anuradhi."
+              />
+              <Link
+                href="/bodh-gaya-guide"
+                className="inline-flex items-center gap-2 bg-[#0E2017] px-6 py-3.5 text-xs font-semibold tracking-[0.14em] text-[#F8F6F0] uppercase shrink-0 hover:bg-[#183827]"
+              >
+                <span>Open Full Bodh Gaya Travel Guide</span>
+                <ArrowUpRight className="h-4 w-4 text-[#C8A45D]" />
+              </Link>
+            </div>
           </Reveal>
 
           <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {NEARBY_DESTINATIONS.map((dest, idx) => (
-              <Reveal key={dest.id} delay={(idx % 3) * 75 as 0 | 75 | 150} className="h-full">
+              <Reveal key={dest.id} delay={((idx % 3) * 75) as 0 | 75 | 150} className="h-full">
                 <article
                   className="flex flex-col justify-between border border-[#0E2017]/15 bg-[#F8F6F0] h-full"
                 >
@@ -136,6 +182,8 @@ export default function ExperiencesPage() {
                       <img
                         src={dest.image}
                         alt={dest.alt}
+                        width={700}
+                        height={440}
                         loading="lazy"
                         referrerPolicy="no-referrer"
                         className="h-full w-full object-cover"
@@ -159,6 +207,15 @@ export default function ExperiencesPage() {
           </div>
         </Container>
       </section>
+
+      {/* Crawlable AEO FAQ Section for Experiences */}
+      <ResortFAQSection
+        faqs={experienceFaqs}
+        eyebrow="Amenities & Activities Q&A"
+        title="Questions About Our Swimming Pool, Meditation Space, Fishing & Family Activities"
+        subtitle="Verified details on recreational facilities at Narayana Green Resorts and nearby Bodh Gaya attractions."
+        className="bg-[#F8F6F0] border-t border-[#0E2017]/12"
+      />
     </div>
   );
 }

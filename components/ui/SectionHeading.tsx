@@ -29,15 +29,15 @@ export function SectionHeading({
       {eyebrow && (
         <div
           className={cn(
-            'mb-3 flex items-center gap-3 text-xs font-semibold tracking-[0.22em] uppercase',
+            'mb-4 flex items-center gap-3.5 text-[11px] font-medium tracking-[0.24em] uppercase',
             align === 'center' ? 'justify-center' : 'justify-start',
             light ? 'text-[#C8A45D]' : 'text-[#8C6D32]'
           )}
         >
           <span
             className={cn(
-              'h-px w-8 shrink-0',
-              light ? 'bg-[#C8A45D]/60' : 'bg-[#8C6D32]/60'
+              'h-px w-9 shrink-0',
+              light ? 'bg-[#C8A45D]/50' : 'bg-[#8C6D32]/50'
             )}
             aria-hidden="true"
           />
@@ -46,7 +46,7 @@ export function SectionHeading({
       )}
       <h2
         className={cn(
-          'font-serif text-3xl leading-[1.18] font-medium tracking-tight [text-wrap:balance] sm:text-4xl lg:text-[2.65rem]',
+          'font-serif text-3xl leading-[1.14] font-normal tracking-[-0.01em] [text-wrap:balance] sm:text-4xl lg:text-[2.85rem]',
           light ? 'text-[#F8F6F0]' : 'text-[#0E2017]'
         )}
       >
@@ -55,9 +55,9 @@ export function SectionHeading({
       {description && (
         <p
           className={cn(
-            'mt-4 text-base leading-relaxed sm:text-[1.0625rem]',
+            'mt-5 text-[15px] leading-[1.78] font-normal sm:text-base',
             align === 'center' ? 'mx-auto max-w-2xl' : 'max-w-2xl',
-            light ? 'text-[#F8F6F0]/78' : 'text-[#4A554E]'
+            light ? 'text-[#F8F6F0]/75' : 'text-[#4A554E]'
           )}
         >
           {description}

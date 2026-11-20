@@ -1,0 +1,992 @@
+# MASTER COMMAND: COMPLETE SEO + AEO + GEO + LLMO + AI SEARCH DOMINATION IMPLEMENTATION
+## Project: Narayana Green Resorts — Bodh Gaya, Bihar
+
+I want you to perform a complete, professional, production-grade search visibility and discoverability implementation across the ENTIRE existing website codebase.
+
+This is not a basic SEO task. Treat it as a comprehensive technical SEO, local SEO, Answer Engine Optimization (AEO), Generative Engine Optimization (GEO), Large Language Model Optimization (LLMO), AI Search Optimization, entity SEO, content optimization, structured data, and website authority implementation project.
+
+**Your job is to inspect the existing codebase, identify every weakness, implement the improvements directly, test them, and prepare the website for production. Do not just give me suggestions, an audit report, or sample code. Actually modify the codebase.**
+
+The business is:
+
+- Brand: Narayana Green Resorts
+- Location: Karmauni, Anuradhi, Near Bodh Gaya, Bihar, India
+- Official website: https://narayanaresorts.com/
+- Current redesigned website/staging reference: https://narayanagreenresortswebsite.vercel.app/
+- Phone: +91 82719 42779
+- Reservation email: reservations@narayanaresorts.com
+- Accommodation: 19 units — 2 Suites, 3 Cottages, 6 Pool-View Rooms, 8 Garden-View Rooms
+- Restaurant: Auric 24×7 Restaurant
+- Restaurant offerings: Multi-cuisine, vegetarian and non-vegetarian food, poolside snacks, room service, Maharaj Magadh Thali
+- Resort facilities: Swimming Pool, Kids Pool, Meditation Space, Fishing Experience, Kids Play Area, Wedding Lawns
+- Events: Destination Weddings, Wedding Functions, Family Celebrations, Corporate Conferences and Gatherings
+- Published event capacity claims: 2,500+ wedding guests and 3,000+ corporate guests
+
+Use these details as initial reference data, but verify them against the existing codebase and official business content before publishing or adding structured data. Never invent business information, facilities, awards, prices, opening hours, reviews, distances, certifications, or claims.
+
+---
+
+# PHASE 1 — COMPLETE CODEBASE & SEO AUDIT
+
+First, inspect the entire repository.
+
+Identify:
+
+1. Existing framework, architecture, routing, rendering strategy and dependencies.
+2. All public routes and pages.
+3. Existing SEO metadata and metadata-generation logic.
+4. Current title tags, meta descriptions, heading hierarchy and canonical URLs.
+5. Existing robots.txt, sitemap.xml and indexing configuration.
+6. Open Graph and Twitter/X metadata.
+7. Existing JSON-LD and Schema.org implementation.
+8. Image optimization, image names, alt attributes and lazy loading.
+9. Internal linking and navigation architecture.
+10. Mobile responsiveness and Core Web Vitals bottlenecks.
+11. JavaScript rendering and crawlability issues.
+12. Broken links, duplicate content, redirect problems and missing pages.
+13. Whether the site is correctly rendered for search-engine crawlers without depending on client-side interaction.
+
+Create a detailed internal audit before implementation.
+
+Then immediately implement the fixes.
+
+IMPORTANT:
+- Preserve the existing visual identity, design system, content, functionality and user experience.
+- Do not redesign the website.
+- Do not unnecessarily replace components or rewrite the application.
+- Work with the existing architecture and dependencies.
+- If Next.js is being used, use its native metadata and rendering capabilities.
+- Do not migrate the framework just for SEO.
+
+# PHASE 2 — COMPLETE TECHNICAL SEO IMPLEMENTATION
+
+Implement a strong technical SEO foundation.
+
+### 2.1 Metadata architecture
+
+Every indexable page must have:
+
+- Unique SEO title.
+- Unique meta description.
+- Correct canonical URL.
+- Correct robots directives.
+- Relevant Open Graph title and description.
+- Relevant Open Graph image.
+- Twitter/X card metadata.
+- Correct language and document metadata.
+- Appropriate structured data.
+
+Avoid duplicate metadata across routes.
+
+Create a centralized SEO configuration system so future pages can easily receive correct metadata.
+
+Use meaningful, descriptive, human-readable URLs.
+
+### 2.2 Canonical and domain management
+
+Create a centralized production site URL configuration.
+
+Use the intended verified production domain consistently across:
+
+- Canonical URLs.
+- Sitemap URLs.
+- Open Graph URLs.
+- JSON-LD URLs.
+- Internal absolute URLs.
+- Social sharing metadata.
+
+Do not accidentally make the Vercel preview domain the canonical production domain.
+
+Production deployments must use the correct approved domain. Vercel preview deployments must not accidentally become independently indexable production websites.
+
+Do not change DNS or domain settings.
+
+### 2.3 Sitemap
+
+Implement a valid XML sitemap containing all important canonical, indexable pages.
+
+Include:
+- Homepage.
+- Accommodation pages.
+- Dining page.
+- Wedding and event pages.
+- Experiences and facilities pages.
+- Gallery page, where indexable.
+- Contact page.
+- Useful Bodh Gaya destination or visitor-guide pages, if genuinely implemented.
+
+Requirements:
+- Absolute production URLs.
+- Only canonical indexable URLs.
+- No 404 pages.
+- No redirect URLs.
+- No preview URLs.
+- No private or utility routes.
+- Correct last-modified dates based on actual content changes.
+
+Use the existing framework's preferred sitemap implementation.
+
+### 2.4 Robots.txt
+
+Create a correct production robots.txt.
+
+Allow legitimate search-engine crawling.
+
+Allow search bots to access public CSS, JavaScript, images and essential resources.
+
+Prevent crawling of genuinely private, administrative or irrelevant routes where appropriate.
+
+Include the production sitemap location.
+
+Do not block important public content accidentally.
+
+### 2.5 Crawlability and indexability
+
+Ensure:
+
+- Every important page is reachable through ordinary crawlable HTML links.
+- Important content is available in rendered HTML.
+- No essential content requires a search bot to click a JavaScript-only button.
+- No important page is accidentally marked noindex.
+- No unintended `nofollow` directives are used.
+- Internal navigation uses real links.
+- Redirects are correct.
+- 404 pages return proper HTTP status codes.
+- There are no broken canonical chains.
+
+### 2.6 Additional technical SEO
+
+Implement where relevant:
+
+- Breadcrumb navigation and structured data.
+- Correct heading hierarchy.
+- Semantic HTML.
+- Descriptive page URLs.
+- Proper favicon and site identity metadata.
+- HTTPS consistency.
+- Compression and caching.
+- Correct image dimensions to reduce layout shifts.
+- Proper redirects for any changed URLs.
+- Accessible navigation and link labels.
+
+# PHASE 3 — COMPLETE ON-PAGE & CONTENT SEO
+
+Build the website around actual search intent rather than keyword stuffing.
+
+The main search market is Bodh Gaya, Gaya, Bihar, and travellers planning accommodation, destination weddings, events, dining and family stays.
+
+### 3.1 Keyword research and mapping
+
+Develop a keyword map covering the following intent groups.
+
+**Primary accommodation intent:**
+- Resort in Bodh Gaya
+- Resorts in Bodh Gaya
+- Resort near Bodh Gaya
+- Best resort in Bodh Gaya
+- Luxury resort in Bodh Gaya
+- Family resort in Bodh Gaya
+- Stay near Bodh Gaya
+- Accommodation near Mahabodhi Temple
+- Resort in Gaya Bihar
+
+**Rooms and accommodation intent:**
+- Rooms in Bodh Gaya
+- Family accommodation near Bodh Gaya
+- Cottage stay near Bodh Gaya
+- Pool-view rooms in Bodh Gaya
+- Garden-view accommodation near Bodh Gaya
+- Suites near Bodh Gaya
+
+**Wedding and events intent:**
+- Wedding venue in Bodh Gaya
+- Destination wedding in Bodh Gaya
+- Wedding resort in Bihar
+- Wedding lawns in Gaya
+- Wedding venue near Gaya
+- Corporate event venue in Bihar
+- Corporate conference venue in Gaya
+- Large wedding venue near Bodh Gaya
+
+**Dining intent:**
+- Restaurant in Bodh Gaya
+- Multi-cuisine restaurant near Bodh Gaya
+- 24-hour restaurant in Bodh Gaya
+- Vegetarian and non-vegetarian dining in Bodh Gaya
+- Magadh Thali in Bodh Gaya
+
+**Experience and local intent:**
+- Resort with swimming pool in Bodh Gaya
+- Family resort with kids pool
+- Resort near Mahabodhi Temple
+- Peaceful resort near Bodh Gaya
+- Resort near Buddhist pilgrimage sites
+- Places to visit near Bodh Gaya
+
+These are research targets, not instructions to insert every phrase everywhere.
+
+Map each keyword cluster to the most relevant page. Avoid making multiple pages compete for the same primary query.
+
+Do not claim that a keyword has a particular search volume or ranking difficulty unless you have actual verified keyword research data.
+
+### 3.2 Page-level SEO
+
+Optimize every core page individually.
+
+Each page should have:
+
+- One clear primary search intent.
+- A descriptive title.
+- A natural meta description.
+- One clear H1.
+- Logical H2 and H3 headings.
+- Useful contextual copy.
+- Relevant image alt text.
+- Internal links to relevant pages.
+- Suitable structured data.
+- A clear enquiry or booking CTA.
+
+Write naturally for real travellers and event planners.
+
+Do not repeat the same keyword unnaturally in every heading or paragraph.
+
+### 3.3 Homepage optimization
+
+Position the homepage primarily around Narayana Green Resorts and resort-related searches near Bodh Gaya.
+
+Clearly explain:
+- What the resort is.
+- Where it is located.
+- Who it serves.
+- What accommodation it provides.
+- What facilities are available.
+- What makes its dining experience distinct.
+- What wedding and event services are offered.
+- How visitors can contact the resort.
+
+Make important information easy for users and search engines to understand.
+
+### 3.4 Dedicated landing pages
+
+Inspect the existing routes first.
+
+Where there is enough genuinely useful content, create or improve dedicated pages for:
+
+1. Accommodation and Rooms.
+2. Suites and Cottages.
+3. Dining — Auric 24×7 Restaurant.
+4. Weddings and Celebrations.
+5. Corporate Events and Conferences.
+6. Resort Facilities and Experiences.
+7. Gallery.
+8. Location and Contact.
+9. Bodh Gaya Visitor Guide.
+
+Do not create thin pages simply to target different keywords.
+
+Every new page must provide genuinely distinct information and serve a real user need.
+
+For important accommodation categories, provide useful descriptions, real photographs, suitable guest information and clear enquiry links.
+
+For wedding and corporate pages, explain the actual venue offerings and enquiry process. Only publish capacity and event claims that the business confirms.
+
+# PHASE 4 — LOCAL SEO & GOOGLE MAPS READINESS
+
+This is an extremely important part of the project.
+
+Optimize the website as a clearly identifiable real-world hospitality business in Bodh Gaya.
+
+### 4.1 Business identity consistency
+
+Create one consistent source of truth for:
+
+- Business name.
+- Address.
+- Contact number.
+- Reservation email.
+- Official website.
+- Location information.
+- Official social profiles, when verified.
+
+Use the same business identity throughout the website, footer, contact page and structured data.
+
+Never create a fictitious full street address, postcode, GPS coordinate or social profile.
+
+### 4.2 Local relevance
+
+Clearly communicate the resort's location in relevant page content.
+
+Naturally establish its relationship with:
+- Bodh Gaya.
+- Gaya.
+- Bihar.
+- Mahabodhi Temple.
+- Great Buddha Statue.
+- Wat Thai Buddhagaya.
+- Other relevant local attractions.
+
+Only include distances and travel information that can be verified. Clearly label approximate distances.
+
+Create a helpful location page containing:
+- The resort's address.
+- A working directions link.
+- An embedded map if already available and appropriate.
+- Contact details.
+- Useful arrival information.
+- Nearby landmarks.
+- Transport and accessibility information only when verified.
+
+### 4.3 Google Business Profile readiness
+
+Optimize the website to support the resort's Google Business Profile.
+
+Prepare a separate `LOCAL_SEO_LAUNCH_CHECKLIST.md` file covering owner-side tasks such as:
+
+- Claiming and verifying the official Business Profile.
+- Selecting accurate primary and secondary categories.
+- Matching business name, address and phone number.
+- Adding the correct website URL.
+- Uploading authentic resort photographs.
+- Adding rooms, dining, wedding and facility details.
+- Maintaining accurate hours and contact information.
+- Collecting genuine guest reviews.
+- Responding professionally to reviews.
+- Adding relevant booking and enquiry links.
+
+Do not claim to have edited Google Business Profile unless you actually have access and have completed that action.
+
+### 4.4 Local trust
+
+Make the contact and business identity information prominent and consistent.
+
+Add links to official maps and directions.
+
+Add genuine first-party testimonials only where the business has supplied authentic reviews and has permission to publish them.
+
+Never fabricate ratings, star counts, review totals or testimonials.
+
+# PHASE 5 — AEO: ANSWER ENGINE OPTIMIZATION
+
+Make the website easy to understand and cite when people ask questions in search engines and answer engines.
+
+Create a useful, clearly organized question-and-answer content system.
+
+### 5.1 Real customer questions
+
+Develop concise, accurate answers to questions such as:
+
+- Where is Narayana Green Resorts located?
+- How can I contact Narayana Green Resorts?
+- What types of rooms are available?
+- How many accommodation units does the resort have?
+- Does the resort offer cottages?
+- Does the resort have a swimming pool?
+- Does the property have a kids pool?
+- Is there a restaurant at the resort?
+- What food is served at Auric Restaurant?
+- Is room service available?
+- Does the resort offer wedding lawns?
+- Can corporate events be hosted at the property?
+- What facilities are available for families?
+- Which attractions are located near the resort?
+- How can guests enquire about room rates?
+- How can someone enquire about a wedding or corporate event?
+
+Only answer questions using confirmed business information.
+
+### 5.2 Answer formatting
+
+Make answers useful for both humans and AI retrieval systems.
+
+Use:
+- Clear question headings.
+- Direct answers at the beginning.
+- Short, self-contained paragraphs.
+- Descriptive subheadings.
+- Lists where they improve clarity.
+- Relevant supporting details.
+- Links to the relevant detailed pages.
+
+Do not hide important answers inside tabs, accordions or JavaScript-only components.
+
+Do not generate hundreds of generic FAQs.
+
+Do not use `FAQPage` structured data merely to chase Google FAQ rich results. Only implement structured data when it is appropriate, valid and useful under current search-engine policies.
+
+### 5.3 Conversion-focused answers
+
+Where appropriate, connect informational answers to:
+- Check availability.
+- Enquire about accommodation.
+- Contact the resort.
+- Request a wedding proposal.
+- Ask about corporate events.
+- Request restaurant information.
+
+Keep the enquiry experience functional.
+
+# PHASE 6 — GEO: GENERATIVE ENGINE OPTIMIZATION
+
+Optimize for discovery, understanding and potential citation in AI-powered search experiences.
+
+Consider:
+- Google AI Overviews and AI Mode.
+- Microsoft Copilot.
+- ChatGPT Search.
+- Perplexity.
+- Gemini.
+- Other AI-powered search and answer engines.
+
+The goal is to make the resort's information accurate, accessible, well-structured, attributable and easy to retrieve.
+
+### 6.1 Entity clarity
+
+Establish a consistent entity identity for Narayana Green Resorts.
+
+Ensure the website clearly connects:
+
+Narayana Green Resorts → Hospitality Business → Resort → Bodh Gaya → Gaya → Bihar → India.
+
+Create clear relationships between:
+- The resort.
+- Its accommodation categories.
+- Its restaurant.
+- Its facilities.
+- Its wedding venue.
+- Its corporate event facilities.
+- Its location.
+- Its contact information.
+
+Use structured data and clear internal linking to reinforce these real relationships.
+
+### 6.2 Information architecture for AI retrieval
+
+Make important information independently understandable.
+
+A page or section should communicate what it is about without requiring an AI system to interpret vague marketing language.
+
+Use specific, factual headings.
+
+For example:
+- Accommodation at Narayana Green Resorts
+- Auric 24×7 Restaurant
+- Destination Weddings Near Bodh Gaya
+- Corporate Events and Conferences
+- Resort Location and Contact Information
+
+Avoid excessive decorative text that makes factual information difficult to identify.
+
+### 6.3 Originality and trust
+
+Prioritize original, first-party information.
+
+Use authentic resort photographs and verified property details.
+
+Provide genuine descriptions of facilities and guest experiences.
+
+Where relevant, clearly explain the difference between actual on-property facilities and nearby tourist attractions.
+
+Do not invent first-hand experiences, awards, certifications, media coverage or endorsements.
+
+### 6.4 AI citation readiness
+
+Make essential facts easy to discover on stable, crawlable URLs.
+
+Add descriptive internal links.
+
+Use consistent facts across pages.
+
+Ensure the public-facing content and its structured data agree.
+
+Do not create misleading or AI-only hidden content.
+
+# PHASE 7 — LLMO & AI CRAWLER ACCESSIBILITY
+
+Make the website accessible to relevant AI search crawlers where the website owner permits it.
+
+### 7.1 Robots configuration
+
+Review the robots.txt configuration for:
+
+- Googlebot.
+- Bingbot.
+- OAI-SearchBot.
+- GPTBot.
+- Other relevant crawlers.
+
+For ChatGPT Search discoverability, allow OAI-SearchBot unless there is a specific reason not to.
+
+Keep the GPTBot decision separate from OAI-SearchBot. Search visibility and permission for training-related crawling are separate choices.
+
+Do not automatically allow every crawler without understanding the distinction.
+
+Never block important public pages from legitimate search crawlers.
+
+Do not add unsupported or invented crawler directives.
+
+### 7.2 llms.txt
+
+Evaluate whether a small, useful `/llms.txt` file is appropriate.
+
+If implemented, create a concise, maintainable resource index containing:
+- Business identity.
+- Official website.
+- Resort location.
+- Core accommodation information.
+- Restaurant information.
+- Facilities.
+- Weddings and corporate events.
+- Important public page URLs.
+- Contact information.
+
+Keep it factually consistent with the actual website.
+
+Do not treat llms.txt as a guaranteed ranking factor or an essential Google indexing requirement. It must not replace robots.txt, sitemap.xml, crawlable HTML, structured data or good content.
+
+### 7.3 AI-friendly site documentation
+
+Where useful, ensure key public pages have:
+- Clear titles.
+- Descriptive headings.
+- Understandable content.
+- Direct factual answers.
+- Stable URLs.
+- Accurate structured data.
+
+Avoid unnecessary AI-specific files or technical additions that provide no genuine value.
+
+# PHASE 8 — ENTITY SEO & STRUCTURED DATA
+
+Implement valid JSON-LD structured data.
+
+Use the most specific applicable Schema.org types and follow current search-engine eligibility requirements.
+
+Potential entities include:
+
+- `WebSite`
+- `Organization`
+- `LodgingBusiness`
+- `Hotel`, where appropriate to the actual business
+- `Restaurant`
+- `WebPage`
+- `BreadcrumbList`
+- `ImageObject`
+- `EventVenue`, only where semantically applicable
+- `ContactPoint`
+
+Use the actual supported Schema.org type hierarchy rather than blindly inserting every type.
+
+### Resort structured data
+
+Include verified properties such as:
+- Business name.
+- Official URL.
+- Logo.
+- Description.
+- Image URLs.
+- Postal address.
+- Telephone.
+- Email.
+- Geographic coordinates, only if verified.
+- SameAs profiles, only if official and verified.
+- Available amenities.
+- Correct business relationships.
+
+### Restaurant structured data
+
+Represent Auric 24×7 Restaurant as a restaurant entity only if the page and content genuinely describe it.
+
+Include verified name, description, location, image, menu URL, telephone and opening hours, where available.
+
+Do not infer precise business opening hours from a marketing name alone.
+
+### Accommodation structured data
+
+Describe accommodation categories only where the visible content supports them.
+
+Do not invent room rates, availability, offers, occupancy limits or booking status.
+
+### Review and rating restrictions
+
+Never create:
+- Fake AggregateRating.
+- Fake Review.
+- Fake star ratings.
+- Fake review counts.
+- Self-serving reviews presented as independent reviews.
+- Fake awards.
+
+### Structured data quality
+
+- Ensure JSON-LD matches visible content.
+- Use absolute URLs.
+- Avoid duplicated or conflicting entity definitions.
+- Make entity IDs consistent across the website.
+- Validate all JSON-LD syntax.
+- Avoid unsupported properties.
+- Do not promise rich results just because structured data exists.
+
+# PHASE 9 — IMAGE SEO & VISUAL SEARCH
+
+The resort is a highly visual hospitality business.
+
+Optimize every important image.
+
+Implement:
+- Descriptive filenames where practical.
+- Relevant alt text.
+- Proper image dimensions.
+- Responsive images.
+- Next-generation image formats where appropriate.
+- Compression without visible quality loss.
+- Correct width and height attributes.
+- Lazy loading for below-the-fold images.
+- Priority loading for the genuine hero/LCP image.
+- Useful image captions where they improve understanding.
+- Relevant contextual text around important images.
+
+Use descriptive image alt text such as:
+- Narayana Green Resorts exterior near Bodh Gaya.
+- Swimming pool at Narayana Green Resorts.
+- Suite room accommodation at Narayana Green Resorts.
+- Auric Restaurant dining area.
+- Wedding lawn at Narayana Green Resorts.
+
+These are examples only. Match alt text to the actual image being displayed.
+
+Never use the same generic keyword-filled alt text for every image.
+
+Do not rename assets in a way that breaks existing image references.
+
+Create an image sitemap only if useful and compatible with the existing framework.
+
+# PHASE 10 — INTERNAL LINKING & SITE AUTHORITY ARCHITECTURE
+
+Build a logical internal linking system.
+
+Connect related pages naturally:
+
+Homepage → Accommodation → Individual Room Categories
+
+Homepage → Dining → Auric Restaurant
+
+Homepage → Weddings → Wedding Enquiry
+
+Homepage → Corporate Events → Event Proposal
+
+Homepage → Experiences → Facilities
+
+Homepage → Bodh Gaya Guide → Nearby Attractions
+
+Contact → Booking and Enquiry Actions
+
+Every important page should be reachable through relevant navigation or contextual links.
+
+Use descriptive anchor text.
+
+Avoid:
+- Repeated generic "click here" links.
+- Excessive exact-match anchor text.
+- Broken links.
+- Orphan pages.
+- Artificial link networks.
+
+Create contextual links that help visitors understand the next useful step.
+
+# PHASE 11 — PERFORMANCE SEO & CORE WEB VITALS
+
+The website must remain fast, responsive and stable.
+
+Optimize:
+
+- Largest Contentful Paint (LCP).
+- Interaction to Next Paint (INP).
+- Cumulative Layout Shift (CLS).
+- First Contentful Paint.
+- Total JavaScript shipped.
+- Image transfer size.
+- Font loading.
+- Third-party scripts.
+- Render-blocking assets.
+- Server response and caching.
+
+Use:
+- Appropriate server rendering or static generation.
+- Image optimization.
+- Font optimization.
+- Code splitting where useful.
+- Lazy loading.
+- Efficient component architecture.
+- Minimal unnecessary JavaScript.
+- Proper cache headers.
+- Reduced layout shifts.
+- Optimized mobile rendering.
+
+Do not sacrifice visual quality to chase artificial performance scores.
+
+Do not introduce unnecessary libraries or duplicate animation packages.
+
+Maintain the current site's animations and interactions while ensuring they do not cause major performance or accessibility problems.
+
+Test mobile and desktop separately.
+
+# PHASE 12 — E-E-A-T, BRAND AUTHORITY & TRUST
+
+Improve the website's Experience, Expertise, Authoritativeness and Trust signals.
+
+Build confidence through genuine business information.
+
+Where the business can supply verified information, create or improve:
+
+- About the Resort.
+- Contact and Reservations.
+- Location and Directions.
+- Guest Information.
+- Facilities.
+- Accommodation Details.
+- Event and Wedding Information.
+- Privacy Policy.
+- Terms and Conditions.
+- Cancellation and Booking Policy.
+- Frequently Asked Questions.
+
+Display consistent business contact information.
+
+Make booking and enquiry terms clear.
+
+Use authentic property photographs.
+
+Use genuine testimonials only with permission.
+
+Never invent authors, staff credentials, guest experiences, press mentions, ratings, certifications or awards.
+
+Avoid generic AI-generated pages that add no meaningful information.
+
+# PHASE 13 — SOCIAL, OPEN GRAPH & BRAND DISCOVERABILITY
+
+Implement appropriate sharing metadata for:
+
+- WhatsApp.
+- Facebook.
+- Instagram link previews.
+- LinkedIn.
+- X/Twitter.
+- Other common social platforms.
+
+Ensure each important page uses an appropriate title, description and image.
+
+Add verified official social profile links to the site's entity information where available.
+
+Ensure logo, brand name and website identity are consistent.
+
+Do not invent social account URLs.
+
+# PHASE 14 — ANALYTICS, SEARCH CONSOLE & INDEXING READINESS
+
+Prepare the website for measurement and search-engine monitoring.
+
+Implement integration points for:
+
+- Google Analytics 4.
+- Google Search Console verification.
+- Bing Webmaster Tools verification.
+- Google Tag Manager, if required.
+- Conversion tracking.
+
+Use environment variables for tracking IDs and verification tokens.
+
+Never hardcode private credentials, API keys or secrets.
+
+Track meaningful conversion actions where consent and implementation permit:
+- Booking enquiry submitted.
+- WhatsApp enquiry clicked.
+- Phone number clicked.
+- Email enquiry clicked.
+- Wedding proposal enquiry.
+- Corporate event enquiry.
+
+Do not falsely mark an enquiry as a completed booking.
+
+Create a `SEO_LAUNCH_CHECKLIST.md` with the exact external actions the owner must complete:
+- Verify the production domain in Google Search Console.
+- Submit the sitemap.
+- Inspect important URLs.
+- Verify the domain in Bing Webmaster Tools.
+- Submit the sitemap to Bing.
+- Configure IndexNow only if appropriate and with a real generated key.
+- Verify the official Google Business Profile.
+- Confirm analytics configuration.
+- Monitor indexing and crawling reports.
+
+Do not claim that the site is indexed or ranking unless that has actually been verified.
+
+# PHASE 15 — CONTENT STRATEGY & FUTURE ORGANIC GROWTH
+
+Prepare a useful content architecture that can grow the business organically.
+
+Create a separate `SEO_CONTENT_ROADMAP.md`.
+
+Prioritize genuinely useful articles and guides, for example:
+
+1. Where to Stay in Bodh Gaya: A Practical Accommodation Guide.
+2. Places to Visit Near Bodh Gaya.
+3. Planning a Family Stay Near Bodh Gaya.
+4. A Guide to Destination Weddings Near Bodh Gaya.
+5. Planning Corporate Events and Conferences in Bihar.
+6. A Guide to Wedding Venues Near Gaya.
+7. Exploring Bodh Gaya and Its Important Spiritual Landmarks.
+8. Dining Experiences and Magadh Cuisine Near Bodh Gaya.
+
+These should be published only when useful, researched and factually accurate.
+
+For every proposed article, define:
+- Search intent.
+- Target audience.
+- Primary topic.
+- Supporting questions.
+- Relevant internal links.
+- Information that needs business verification.
+
+Do not automatically publish dozens of shallow AI-generated articles.
+
+Prioritize quality, uniqueness, accuracy and first-party value.
+
+# PHASE 16 — SECURITY, ACCESSIBILITY & QUALITY
+
+Protect the existing website.
+
+Ensure:
+- All public forms continue working.
+- WhatsApp links work.
+- Phone links work.
+- Email links work.
+- Navigation works.
+- Image galleries work.
+- Booking enquiry functionality remains intact.
+- No exposed secrets.
+- No unsafe user-input rendering.
+- No accidental indexing of private pages.
+- Keyboard accessibility.
+- Useful image alt text.
+- Semantic HTML.
+- Adequate color contrast.
+- Reduced-motion support.
+
+Do not add fake booking engines, fake availability, fabricated prices or misleading reservation confirmations.
+
+# PHASE 17 — FINAL TESTING & VERIFICATION
+
+After implementation, run a complete validation process.
+
+### Technical checks
+- Production build.
+- TypeScript checks.
+- Linting.
+- All public routes.
+- Metadata presence and uniqueness.
+- Canonical correctness.
+- Sitemap validity.
+- Robots.txt accessibility.
+- JSON-LD validity.
+- Broken link checks.
+- Redirect checks.
+- Image loading.
+- Mobile responsiveness.
+- Console errors.
+- Form functionality.
+- WhatsApp, telephone and email links.
+
+### SEO checks
+- Unique title and description for every indexable route.
+- One clear primary H1 on every page.
+- Correct heading hierarchy.
+- Correct canonical URLs.
+- No accidental noindex.
+- No duplicate page metadata.
+- No broken internal links.
+- No incorrect structured data.
+- No preview deployment URLs in production metadata.
+- No fabricated information.
+- No keyword stuffing.
+
+### AI readiness checks
+- OAI-SearchBot robots policy.
+- Googlebot and Bingbot accessibility.
+- Crawlable page content.
+- Clear business entity information.
+- Consistent facts between HTML and JSON-LD.
+- Useful answer-oriented content.
+- Public content accessible without mandatory client-side interactions.
+
+### Performance checks
+Run the available Lighthouse or equivalent performance checks.
+
+Report measured results, not estimates.
+
+Where possible, inspect mobile and desktop separately.
+
+---
+
+# FINAL DELIVERABLES
+
+I expect you to deliver the actual implementation inside the existing repository.
+
+Also create:
+
+1. `SEO_IMPLEMENTATION_REPORT.md`
+2. `SEO_LAUNCH_CHECKLIST.md`
+3. `SEO_CONTENT_ROADMAP.md`
+
+The implementation report must explain:
+- What was wrong.
+- What was fixed.
+- What files were modified.
+- What new files were created.
+- What metadata and structured data were implemented.
+- What pages were optimized.
+- What performance improvements were made.
+- What external configuration is still required.
+- What tests were successfully completed.
+- What could not be verified.
+
+At the end, provide a clear completion summary with:
+
+- Technical SEO status.
+- Local SEO status.
+- On-page SEO status.
+- AEO status.
+- GEO status.
+- LLMO and AI crawler readiness.
+- Structured data status.
+- Sitemap and robots status.
+- Performance status.
+- Build and testing status.
+- Remaining manual actions.
+
+Use PASS / NEEDS ATTENTION / NOT VERIFIED honestly.
+
+## NON-NEGOTIABLE RULES
+
+1. DO NOT only provide an audit. IMPLEMENT the improvements.
+2. DO NOT redesign the existing website.
+3. DO NOT break any existing website functionality.
+4. DO NOT use keyword stuffing.
+5. DO NOT fabricate business details, reviews, ratings, awards, prices or statistics.
+6. DO NOT create thin doorway pages.
+7. DO NOT add unnecessary SEO plugins or libraries.
+8. DO NOT create fake structured data.
+9. DO NOT make unsupported promises about Google rankings or AI citations.
+10. DO NOT make the website slower in the name of SEO.
+11. DO NOT index development or preview environments.
+12. DO NOT mark external integrations as completed without verification.
+13. DO NOT stop after generating documentation. Complete the code changes and tests first.
+
+**ULTIMATE OBJECTIVE:**
+
+Make Narayana Green Resorts a technically excellent, locally relevant, authoritative, fast, crawlable and AI-understandable hospitality website.
+
+The website should be properly prepared to compete for relevant organic searches related to resorts, accommodation, family stays, dining, weddings, corporate events and travel near Bodh Gaya.
+
+Prioritize sustainable search visibility, user trust, genuine business authority, qualified traffic and actual booking enquiries — not superficial SEO scores.
+
+START BY INSPECTING THE ENTIRE CODEBASE, THEN IMPLEMENT EVERYTHING THAT IS APPROPRIATE, AND FINISH WITH FULL TESTING.

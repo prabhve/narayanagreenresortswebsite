@@ -12,11 +12,14 @@ import {
 } from 'lucide-react';
 import { ROOM_CATEGORIES, getRoomBySlug } from '@/data/rooms';
 import { RESORT_CONFIG } from '@/data/resort';
+import { getFaqsByCategories } from '@/data/seo-faqs';
 import { buildBookingQueryUrl } from '@/lib/booking';
-import { constructPageMetadata } from '@/lib/seo';
+import { constructPageMetadata, getRoomJsonLd } from '@/lib/seo';
 import { Container } from '@/components/ui/Container';
 import { Reveal } from '@/components/ui/Reveal';
 import { ClipReveal } from '@/components/ui/MotionPrimitives';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { ResortFAQSection } from '@/components/seo/ResortFAQSection';
 
 export function generateStaticParams() {
   return ROOM_CATEGORIES.map((room) => ({
@@ -41,9 +44,14 @@ export async function generateMetadata({
 
   return constructPageMetadata({
     title: `${room.name} (${room.unitCount} Units) — Stay at Narayana Green Resorts Bodh Gaya`,
-    description: `${room.shortDescription} Discover ${room.name} at Narayana Green Resorts near Bodh Gaya and enquire directly for package tariffs.`,
+    description: `${room.shortDescription} Discover ${room.name} (${room.unitCount} verified units out of 19 total) at Narayana Green Resorts in Karmauni, Anuradhi, near Bodh Gaya and enquire directly for package tariffs.`,
     path: `/stay/${room.slug}`,
     image: room.primaryImage,
+    keywords: [
+      `${room.name} Bodh Gaya`,
+      `${room.name} Narayana Green Resorts`,
+      'luxury stay in Bodh Gaya Bihar',
+    ],
   });
 }
 
@@ -60,13 +68,31 @@ export default async function RoomDetailPage({
   }
 
   const otherRooms = ROOM_CATEGORIES.filter((r) => r.slug !== room.slug);
+  const roomJsonLd = getRoomJsonLd(room);
+  const roomFaqs = getFaqsByCategories(['stay', 'dining', 'experiences'], 4);
 
   return (
     <div className="bg-[#F8F6F0]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(roomJsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
+
       {/* Breadcrumb & Hero Header */}
       <section className="border-b border-[#F8F6F0]/10 bg-[#0E2017] py-16 text-[#F8F6F0] lg:py-24">
         <Container>
           <Reveal delay={0}>
+            <Breadcrumbs
+              variant="light"
+              className="mb-5"
+              items={[
+                { name: 'Stay & Accommodations', path: '/stay' },
+                { name: room.name, path: `/stay/${room.slug}` },
+              ]}
+            />
+
             <Link
               href="/stay"
               className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.16em] text-[#C8A45D] uppercase hover:underline"
@@ -116,6 +142,8 @@ export default async function RoomDetailPage({
               <img
                 src={room.images[0].src}
                 alt={room.images[0].alt}
+                width={1200}
+                height={750}
                 referrerPolicy="no-referrer"
                 className="h-full w-full object-cover"
               />
@@ -132,6 +160,9 @@ export default async function RoomDetailPage({
                   <img
                     src={img.src}
                     alt={img.alt}
+                    width={600}
+                    height={375}
+                    loading="lazy"
                     referrerPolicy="no-referrer"
                     className="h-full min-h-[200px] w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-105"
                   />
@@ -189,6 +220,21 @@ export default async function RoomDetailPage({
                     <p className="mt-1 text-sm text-[#4A554E]">{room.idealFor}</p>
                   </div>
                 </div>
+              </div>
+
+              <div className="mt-8 flex flex-wrap items-center gap-4 text-xs text-[#4A554E]">
+                <span>Explore Complementary Resort Services:</span>
+                <Link href="/dining" className="font-semibold text-[#0E2017] underline hover:text-[#8C6D32]">
+                  Auric 24×7 Restaurant & Room Service
+                </Link>
+                <span>·</span>
+                <Link href="/experiences" className="font-semibold text-[#0E2017] underline hover:text-[#8C6D32]">
+                  Swimming Pool & Meditation Space
+                </Link>
+                <span>·</span>
+                <Link href="/bodh-gaya-guide" className="font-semibold text-[#0E2017] underline hover:text-[#8C6D32]">
+                  Nearby Bodh Gaya Landmarks
+                </Link>
               </div>
             </div>
 
@@ -252,6 +298,14 @@ export default async function RoomDetailPage({
         </Container>
       </section>
 
+      {/* Crawlable AEO FAQ Section */}
+      <ResortFAQSection
+        faqs={roomFaqs}
+        eyebrow={`${room.name} Guest Q&A`}
+        title={`Common Questions About Staying in ${room.name}`}
+        subtitle="Verified details on room amenities, 24-hour dining service, swimming pool access, and direct reservations."
+      />
+
       {/* Other Room Categories */}
       <section className="border-t border-[#0E2017]/12 bg-[#EFECE3] py-16 lg:py-20">
         <Container>
@@ -278,6 +332,8 @@ export default async function RoomDetailPage({
                   <img
                     src={item.primaryImage}
                     alt={item.name}
+                    width={600}
+                    height={375}
                     loading="lazy"
                     referrerPolicy="no-referrer"
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

@@ -142,27 +142,34 @@ export function Lightbox({
                 custom={direction}
                 initial={
                   prefersReducedMotion
-                    ? false
+                    ? { opacity: 0 }
                     : { opacity: 0, x: direction * 26, scale: 0.98 }
                 }
-                animate={{ opacity: 1, x: 0, scale: 1 }}
+                animate={
+                  prefersReducedMotion
+                    ? { opacity: 1 }
+                    : { opacity: 1, x: 0, scale: 1 }
+                }
                 exit={
                   prefersReducedMotion
-                    ? undefined
+                    ? { opacity: 0 }
                     : { opacity: 0, x: direction * -26, scale: 0.98 }
                 }
-                transition={{ duration: 0.28, ease: LUXURY_EASE }}
+                transition={{
+                  duration: prefersReducedMotion ? 0.15 : 0.4,
+                  ease: LUXURY_EASE,
+                }}
                 className="transform-gpu"
               >
                 <img
                   src={currentItem.src}
                   alt={currentItem.alt}
                   referrerPolicy="no-referrer"
-                  className="mx-auto max-h-[75vh] w-auto max-w-full border border-[#F8F6F0]/15 object-contain"
+                  className="mx-auto max-h-[75vh] w-auto max-w-full border border-[#F8F6F0]/10 object-contain shadow-2xl"
                 />
-                <div className="mt-4 text-center">
-                  <p className="font-serif text-lg text-[#F8F6F0]">{currentItem.title}</p>
-                  <p className="mt-0.5 text-xs text-[#F8F6F0]/65">{currentItem.alt}</p>
+                <div className="mt-5 text-center">
+                  <p className="font-serif text-xl font-normal text-[#F8F6F0]">{currentItem.title}</p>
+                  <p className="mt-1 text-xs font-light text-[#F8F6F0]/65">{currentItem.alt}</p>
                 </div>
               </motion.div>
             </AnimatePresence>

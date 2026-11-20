@@ -6,6 +6,7 @@ import {
   motion,
   useMotionValueEvent,
   useScroll,
+  useSpring,
   useTransform,
 } from 'motion/react';
 import { ArrowUp } from 'lucide-react';
@@ -13,7 +14,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useHydratedReducedMotion } from '@/hooks/use-client-env';
 import { cn } from '@/lib/utils';
 
-export const LUXURY_EASE = [0.16, 1, 0.3, 1] as const;
+export const LUXURY_EASE = [0.22, 1, 0.36, 1] as const;
 
 type ClipDirection = 'bottom' | 'left' | 'right' | 'center';
 type DelayMs = 0 | 75 | 150 | 225 | 300 | 375;
@@ -28,10 +29,10 @@ interface ClipRevealProps {
 }
 
 const CLIP_INITIAL_MAP: Record<ClipDirection, string> = {
-  bottom: 'inset(10% 0% 0% 0%)',
-  left: 'inset(0% 10% 0% 0%)',
-  right: 'inset(0% 0% 0% 10%)',
-  center: 'inset(6% 6% 6% 6%)',
+  bottom: 'inset(12% 0% 0% 0%)',
+  left: 'inset(0% 12% 0% 0%)',
+  right: 'inset(0% 0% 0% 12%)',
+  center: 'inset(5% 5% 5% 5%)',
 };
 
 export function ClipReveal({
@@ -39,8 +40,8 @@ export function ClipReveal({
   className,
   direction = 'bottom',
   delay = 0,
-  duration = 0.85,
-  scaleFrom = 1.07,
+  duration = 1.1,
+  scaleFrom = 1.06,
 }: ClipRevealProps) {
   const prefersReducedMotion = useHydratedReducedMotion();
   const isMobile = useIsMobile();
@@ -49,9 +50,9 @@ export function ClipReveal({
     <motion.div
       initial={
         prefersReducedMotion
-          ? false
+          ? { opacity: 1 }
           : isMobile
-            ? { opacity: 0, y: 12 }
+            ? { opacity: 0, y: 14 }
             : {
                 opacity: 0,
                 clipPath: CLIP_INITIAL_MAP[direction],
@@ -59,20 +60,22 @@ export function ClipReveal({
               }
       }
       whileInView={
-        isMobile
-          ? { opacity: 1, y: 0 }
-          : {
-              opacity: 1,
-              clipPath: 'inset(0% 0% 0% 0%)',
-              scale: 1,
-            }
+        prefersReducedMotion
+          ? { opacity: 1 }
+          : isMobile
+            ? { opacity: 1, y: 0 }
+            : {
+                opacity: 1,
+                clipPath: 'inset(0% 0% 0% 0%)',
+                scale: 1,
+              }
       }
-      viewport={{ once: true, amount: 0.1 }}
+      viewport={{ once: true, amount: 0.08, margin: '0px 0px -30px 0px' }}
       transition={
         prefersReducedMotion
           ? { duration: 0 }
           : {
-              duration: isMobile ? 0.55 : duration,
+              duration: isMobile ? 0.65 : duration,
               delay: delay / 1000,
               ease: LUXURY_EASE,
             }
@@ -94,8 +97,8 @@ interface ParallaxMediaProps {
 export function ParallaxMedia({
   children,
   className,
-  offset = 22,
-  scaleRange = [1.08, 1.08],
+  offset = 28,
+  scaleRange = [1.09, 1.02],
 }: ParallaxMediaProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const prefersReducedMotion = useHydratedReducedMotion();
@@ -106,8 +109,14 @@ export function ParallaxMedia({
     offset: ['start end', 'end start'],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [-offset, offset]);
-  const scale = useTransform(scrollYProgress, [0, 1], scaleRange);
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 65,
+    damping: 24,
+    mass: 0.35,
+  });
+
+  const y = useTransform(smoothProgress, [0, 1], [-offset, offset]);
+  const scale = useTransform(smoothProgress, [0, 1], scaleRange);
 
   const disableParallax = Boolean(prefersReducedMotion || isMobile);
 
@@ -136,7 +145,7 @@ export function BackToTopButton() {
   const prefersReducedMotion = useHydratedReducedMotion();
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
-    const nextVisible = latest > 480;
+    const nextVisible = latest > 520;
     if (nextVisible !== visible) {
       setVisible(nextVisible);
     }
@@ -155,12 +164,12 @@ export function BackToTopButton() {
         <motion.button
           type="button"
           onClick={scrollToTop}
-          initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 12 }}
+          initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
-          transition={{ duration: 0.25, ease: LUXURY_EASE }}
+          exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 14 }}
+          transition={{ duration: prefersReducedMotion ? 0.15 : 0.35, ease: LUXURY_EASE }}
           aria-label="Back to top"
-          className="fixed right-4 bottom-16 z-30 flex h-11 w-11 items-center justify-center border border-[#C8A45D]/55 bg-[#0E2017]/92 text-[#C8A45D] shadow-lg backdrop-blur-md transition-colors duration-200 hover:border-[#C8A45D] hover:bg-[#C8A45D] hover:text-[#0E2017] focus-visible:ring-2 focus-visible:ring-[#C8A45D] focus-visible:outline-none lg:right-8 lg:bottom-8 cursor-pointer"
+          className="fixed right-4 bottom-16 z-30 flex h-11 w-11 items-center justify-center border border-[#C8A45D]/40 bg-[#0E2017]/90 text-[#C8A45D] shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C8A45D] hover:bg-[#C8A45D] hover:text-[#0E2017] focus-visible:ring-2 focus-visible:ring-[#C8A45D] focus-visible:outline-none lg:right-8 lg:bottom-8 cursor-pointer"
         >
           <ArrowUp className="h-4 w-4" />
         </motion.button>

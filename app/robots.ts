@@ -1,14 +1,37 @@
-import type { MetadataRoute } from 'next';
-import { getBaseUrl } from '@/lib/seo';
+import { MetadataRoute } from 'next';
+import { PRODUCTION_SITE_URL, isPreviewDeployment } from '@/lib/seo';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = getBaseUrl();
+  if (isPreviewDeployment()) {
+    return {
+      rules: [
+        {
+          userAgent: '*',
+          disallow: '/',
+        },
+      ],
+      sitemap: `${PRODUCTION_SITE_URL}/sitemap.xml`,
+    };
+  }
 
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-    },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    rules: [
+      {
+        userAgent: ['Googlebot', 'Bingbot', 'OAI-SearchBot', 'Applebot', 'PerplexityBot'],
+        allow: '/',
+        disallow: ['/api/', '/_next/'],
+      },
+      {
+        userAgent: 'GPTBot',
+        disallow: ['/'],
+      },
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/api/', '/_next/'],
+      },
+    ],
+    sitemap: `${PRODUCTION_SITE_URL}/sitemap.xml`,
+    host: PRODUCTION_SITE_URL,
   };
 }

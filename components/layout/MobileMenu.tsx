@@ -18,8 +18,10 @@ const MOBILE_NAV_LINKS = [
   { label: 'Auric 24×7 Dining', href: '/dining' },
   { label: 'Experiences & Pool', href: '/experiences' },
   { label: 'Weddings & Events', href: '/weddings-events' },
+  { label: 'Bodh Gaya Guide', href: '/bodh-gaya-guide' },
   { label: 'Resort Gallery', href: '/gallery' },
   { label: 'Contact & Directions', href: '/contact' },
+  { label: 'Policies & Privacy', href: '/policies' },
 ];
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {

@@ -3,12 +3,15 @@ import Link from 'next/link';
 import { ArrowUpRight, MessageCircle, Check, Phone } from 'lucide-react';
 import { ROOM_CATEGORIES } from '@/data/rooms';
 import { RESORT_CONFIG } from '@/data/resort';
+import { getFaqsByCategories } from '@/data/seo-faqs';
 import { buildBookingQueryUrl } from '@/lib/booking';
-import { constructPageMetadata } from '@/lib/seo';
+import { constructPageMetadata, getWebPageJsonLd } from '@/lib/seo';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/ui/Reveal';
 import { ClipReveal, ParallaxMedia } from '@/components/ui/MotionPrimitives';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { ResortFAQSection } from '@/components/seo/ResortFAQSection';
 
 export const metadata = constructPageMetadata({
   title: 'Stay & Accommodations — 19 Luxury Units | Narayana Green Resorts Bodh Gaya',
@@ -16,17 +19,43 @@ export const metadata = constructPageMetadata({
     'Explore 19 verified luxury accommodations at Narayana Green Resorts near Bodh Gaya: 2 Suites Rooms, 3 independent Cottage Rooms, 6 Pool-View Rooms, and 8 Garden-View Rooms.',
   path: '/stay',
   image: '/media/rooms/suites/suites-room-primary.png',
+  keywords: [
+    'luxury rooms in Bodh Gaya',
+    'cottage resort in Bodh Gaya',
+    'pool view rooms Bodh Gaya',
+    'garden view rooms Bodh Gaya',
+    'suites in Bodh Gaya resort',
+    'Narayana Green Resorts rooms',
+  ],
 });
 
 export default function StayPage() {
+  const pageJsonLd = getWebPageJsonLd({
+    title: 'Stay & Accommodations — 19 Luxury Units | Narayana Green Resorts Bodh Gaya',
+    description:
+      'Explore 19 verified luxury accommodations at Narayana Green Resorts near Bodh Gaya: 2 Suites Rooms, 3 independent Cottage Rooms, 6 Pool-View Rooms, and 8 Garden-View Rooms.',
+    path: '/stay',
+  });
+
+  const stayFaqs = getFaqsByCategories(['stay', 'general'], 6);
+
   return (
     <div className="bg-[#F8F6F0]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(pageJsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
+
       {/* Page Hero Banner */}
       <section className="relative overflow-hidden border-b border-[#F8F6F0]/10 bg-[#0E2017] py-20 text-[#F8F6F0] lg:py-28">
         <ParallaxMedia offset={24} className="absolute inset-0 z-0 opacity-35">
           <img
             src="/media/hero/hero-resort-villas-5.png"
-            alt="Accommodations and villas at Narayana Green Resorts"
+            alt="Accommodations and villas at Narayana Green Resorts near Bodh Gaya"
+            width={1600}
+            height={1000}
             referrerPolicy="no-referrer"
             className="h-full w-full object-cover"
           />
@@ -38,19 +67,25 @@ export default function StayPage() {
 
         <Container className="relative z-10">
           <Reveal delay={0}>
+            <Breadcrumbs
+              variant="light"
+              className="mb-6"
+              items={[{ name: 'Stay & Accommodations', path: '/stay' }]}
+            />
+
             <div className="max-w-3xl">
-              <div className="flex flex-wrap items-center gap-3 text-xs font-semibold tracking-[0.22em] text-[#C8A45D] uppercase">
-                <span className="h-px w-8 bg-[#C8A45D]" aria-hidden="true" />
+              <div className="flex flex-wrap items-center gap-3.5 text-[11px] font-medium tracking-[0.24em] text-[#C8A45D] uppercase">
+                <span className="h-px w-9 bg-[#C8A45D]/70" aria-hidden="true" />
                 <span>19 Verified Accommodations</span>
                 <span aria-hidden="true">·</span>
                 <span>Karmauni, Near Bodh Gaya</span>
               </div>
 
-              <h1 className="mt-4 font-serif text-4xl leading-[1.12] font-medium tracking-tight text-[#F8F6F0] [text-wrap:balance] sm:text-5xl lg:text-6xl">
+              <h1 className="mt-5 font-serif text-4xl leading-[1.1] font-normal tracking-tight text-[#F8F6F0] [text-wrap:balance] sm:text-5xl lg:text-6xl">
                 Suites, Independent Cottages & Serene View Rooms
               </h1>
 
-              <p className="mt-5 max-w-2xl text-base leading-relaxed text-[#F8F6F0]/80 sm:text-lg">
+              <p className="mt-6 max-w-2xl text-[15px] leading-[1.8] font-light text-[#F8F6F0]/80 sm:text-[17px]">
                 Each of our 19 accommodations is designed to immerse you in the tranquil
                 greenery of Bodh Gaya while offering contemporary comfort, private sightlines,
                 and 24-hour dining service from Auric 24×7 Restaurant.
@@ -85,12 +120,12 @@ export default function StayPage() {
       </section>
 
       {/* Detailed Editorial Breakdown of All 4 Room Categories */}
-      <section className="py-16 lg:py-24">
-        <Container className="space-y-20">
+      <section className="py-20 lg:py-32">
+        <Container className="space-y-24">
           {ROOM_CATEGORIES.map((room, index) => (
             <Reveal key={room.slug} delay={index % 2 === 0 ? 75 : 150} className="h-full">
               <article
-                className="grid grid-cols-1 items-stretch gap-10 border border-[#0E2017]/15 bg-[#FFFFFF] p-6 sm:p-10 lg:grid-cols-12 h-full"
+                className="grid grid-cols-1 items-stretch gap-12 border-b border-[#0E2017]/10 pb-20 last:border-b-0 lg:grid-cols-12 lg:gap-16 h-full"
               >
                 {/* Photo Showcase Column */}
                 <div
@@ -106,6 +141,9 @@ export default function StayPage() {
                       <img
                         src={room.primaryImage}
                         alt={room.images[0]?.alt || room.name}
+                        width={1200}
+                        height={750}
+                        loading={index === 0 ? 'eager' : 'lazy'}
                         referrerPolicy="no-referrer"
                         className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                       />
@@ -123,6 +161,8 @@ export default function StayPage() {
                           <img
                             src={img.src}
                             alt={img.alt}
+                            width={600}
+                            height={375}
                             loading="lazy"
                             referrerPolicy="no-referrer"
                             className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-105"
@@ -140,18 +180,18 @@ export default function StayPage() {
                   }`}
                 >
                   <div>
-                    <div className="flex items-center gap-2.5 text-xs font-semibold tracking-[0.18em] text-[#8C6D32] uppercase">
-                      <span className="font-mono tabular-nums">0{index + 1}.</span>
+                    <div className="flex items-center gap-2.5 text-[11px] font-medium tracking-[0.2em] text-[#8C6D32] uppercase">
+                      <span className="font-mono font-normal tabular-nums">0{index + 1}.</span>
                       <span>{room.unitLabel}</span>
                       <span aria-hidden="true">·</span>
                       <span>{room.tagline}</span>
                     </div>
 
-                    <h2 className="mt-3 font-serif text-3xl font-medium text-[#0E2017] sm:text-4xl">
+                    <h2 className="mt-3 font-serif text-3xl font-normal text-[#0E2017] sm:text-4xl">
                       {room.name}
                     </h2>
 
-                    <p className="mt-4 text-base leading-relaxed text-[#4A554E]">
+                    <p className="mt-4 text-[15px] leading-[1.8] text-[#4A554E]">
                       {room.editorialDescription}
                     </p>
 
@@ -172,7 +212,11 @@ export default function StayPage() {
                     <p className="mt-4 text-xs leading-relaxed text-[#4A554E]">
                       <strong className="text-[#0E2017]">Rate & Tariff Policy:</strong> Official
                       nightly tariffs vary by season, occupancy, and event dates. Contact our
-                      reservations desk for bespoke stay packages.
+                      reservations desk for bespoke stay packages or read our{' '}
+                      <Link href="/policies" className="underline hover:text-[#0E2017]">
+                        reservation terms
+                      </Link>
+                      .
                     </p>
                   </div>
 
@@ -199,6 +243,14 @@ export default function StayPage() {
           ))}
         </Container>
       </section>
+
+      {/* Crawlable AEO FAQ Section for Stay & Rooms */}
+      <ResortFAQSection
+        faqs={stayFaqs}
+        eyebrow="Accommodations Q&A"
+        title="Frequently Asked Questions About Rooms & Suites at Narayana Green Resorts"
+        subtitle="Verified details on our 19 total luxury rooms and cottages, family stay options, and direct reservation process."
+      />
 
       {/* Group Buyout Banner (All 19 Units) */}
       <section className="border-t border-[#0E2017]/10 bg-[#0E2017] py-16 text-[#F8F6F0]">

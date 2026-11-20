@@ -14,138 +14,163 @@ export function Dining() {
   return (
     <section
       id="dining"
-      className="scroll-mt-20 border-b border-[#F8F6F0]/10 bg-[#0E2017] py-20 text-[#F8F6F0] lg:py-28"
+      className="scroll-mt-20 border-b border-[#F8F6F0]/8 bg-[#0E2017] py-24 text-[#F8F6F0] lg:py-36"
     >
       <Container>
-        <div className="grid grid-cols-1 items-stretch gap-12 lg:grid-cols-12 lg:gap-16">
-          {/* Left Column: Auric 24×7 Story & Verified Offerings */}
-          <div className="flex flex-col justify-between lg:col-span-6">
-            <div>
-              <Reveal delay={0}>
-                <SectionHeading
-                  eyebrow={dining.eyebrow}
-                  title={dining.name}
-                  description={dining.description}
-                  light
-                />
-              </Reveal>
+        {/* Top Editorial Spread: Culinary Narrative + Widescreen Dining Room Canvas */}
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-5">
+            <Reveal delay={0}>
+              <SectionHeading
+                eyebrow={dining.eyebrow}
+                title={dining.name}
+                description={dining.description}
+                light
+              />
+            </Reveal>
 
-              {/* Verified Dining Offerings List with Progressive Stagger */}
-              <div className="mt-10 divide-y divide-[#F8F6F0]/12 border-y border-[#F8F6F0]/12">
-                {dining.offerings.map((item, idx) => (
-                  <Reveal
-                    key={item.id}
-                    delay={([0, 75, 150, 225, 300] as const)[idx % 5]}
-                    distance={12}
-                  >
-                    <div className="py-4">
-                      <div className="flex items-baseline justify-between gap-4">
-                        <h3 className="font-serif text-lg font-medium text-[#F8F6F0]">
-                          <span className="mr-2.5 font-mono text-xs text-[#C8A45D] tabular-nums">
-                            0{idx + 1}.
-                          </span>
-                          {item.title}
-                        </h3>
-                      </div>
-                      <p className="mt-1 pl-7 text-sm leading-relaxed text-[#F8F6F0]/72">
-                        {item.description}
-                      </p>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-
-            {/* Action Bar */}
-            <Reveal delay={225}>
-              <div className="mt-10 flex flex-wrap items-center gap-4">
+            <Reveal delay={150}>
+              <div className="mt-8 flex flex-wrap items-center gap-4">
                 <Link
                   href={buildBookingQueryUrl({ type: 'dining' })}
-                  className="inline-flex items-center gap-2.5 bg-[#C8A45D] px-7 py-4 text-xs font-semibold tracking-[0.15em] text-[#0E2017] uppercase whitespace-nowrap transition-colors duration-200 hover:bg-[#d6b36c]"
+                  className="inline-flex items-center gap-2.5 bg-[#C8A45D] px-7 py-3.5 text-[11px] font-medium tracking-[0.16em] text-[#0E2017] uppercase whitespace-nowrap transition-all duration-300 hover:bg-[#d6b36c]"
                 >
-                  <Utensils className="h-4 w-4" />
+                  <Utensils className="h-3.5 w-3.5" />
                   <span>Reserve a Table</span>
                 </Link>
 
                 <Link
                   href="/dining"
-                  className="group inline-flex items-center gap-2 border border-[#F8F6F0]/30 px-7 py-4 text-xs font-semibold tracking-[0.15em] text-[#F8F6F0] uppercase whitespace-nowrap transition-colors duration-200 hover:border-[#C8A45D] hover:text-[#C8A45D]"
+                  className="group inline-flex items-center gap-2 border border-[#F8F6F0]/25 px-7 py-3.5 text-[11px] font-medium tracking-[0.16em] text-[#F8F6F0] uppercase whitespace-nowrap transition-all duration-300 hover:border-[#C8A45D] hover:text-[#C8A45D]"
                 >
                   <span>Explore Dining</span>
-                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
-
-                <a
-                  href={`${RESORT_CONFIG.contact.whatsappBaseUrl}?text=${encodeURIComponent(
-                    'Hello Auric 24×7 Restaurant at Narayana Green Resorts, I would like to enquire about dining and the Maharaj Magadh Thali.'
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-3 py-2 text-xs font-semibold tracking-wider text-[#C8A45D] uppercase hover:underline"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  <span>WhatsApp Menu Enquiry</span>
-                </a>
               </div>
             </Reveal>
           </div>
 
-          {/* Right Column: Directional Restaurant Reveal & Parallax + Food Scale Transition */}
-          <div className="flex flex-col justify-between gap-6 lg:col-span-6">
-            <ClipReveal direction="right" delay={150}>
-              <div className="group relative aspect-[16/10] w-full overflow-hidden border border-[#F8F6F0]/15 bg-[#183827]">
-                <ParallaxMedia offset={18} className="h-full w-full">
+          <div className="lg:col-span-7">
+            <ClipReveal direction="right" delay={75}>
+              <div className="group relative aspect-[16/10] w-full overflow-hidden bg-[#183827]">
+                <ParallaxMedia
+                  offset={24}
+                  scaleRange={[1.08, 1.01]}
+                  className="h-full w-full"
+                >
                   <img
                     src="/media/dining/auric-restaurant-interior.jpeg"
                     alt="Auric 24×7 Restaurant interior dining room at Narayana Green Resorts"
                     loading="lazy"
                     referrerPolicy="no-referrer"
-                    className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                    className="h-full w-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
                   />
                 </ParallaxMedia>
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0E2017]/80 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-5 right-5 flex items-center justify-between text-xs text-[#F8F6F0]">
-                  <span className="font-serif text-base text-[#F8F6F0]">
+                <div className="absolute right-6 bottom-5 left-6 flex flex-wrap items-center justify-between gap-2 text-xs text-[#F8F6F0]">
+                  <span className="font-serif text-lg font-normal text-[#F8F6F0]">
                     Auric 24×7 Multi-Cuisine Dining Room
                   </span>
-                  <span className="inline-flex items-center gap-1.5 text-[#C8A45D]">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.16em] text-[#C8A45D] uppercase">
                     <Clock className="h-3.5 w-3.5" />
-                    <span>24-Hour Service</span>
+                    <span>All-Day & Night Service</span>
                   </span>
                 </div>
               </div>
             </ClipReveal>
+          </div>
+        </div>
 
-            {/* Signature Maharaj Magadh Thali Spotlight */}
-            <Reveal delay={225}>
-              <div className="group grid grid-cols-1 items-center gap-6 border border-[#C8A45D]/30 bg-[#183827]/50 p-6 transition-colors duration-300 hover:border-[#C8A45D]/60 sm:grid-cols-12">
+        {/* Bottom Culinary Diptych: Maharaj Magadh Thali Feature + 5 Curated Offerings */}
+        <div className="mt-16 grid grid-cols-1 items-start gap-12 border-t border-[#F8F6F0]/10 pt-16 lg:mt-24 lg:grid-cols-12 lg:gap-16">
+          {/* Left: Signature Maharaj Magadh Thali Editorial Spotlight */}
+          <div className="lg:col-span-5">
+            <Reveal delay={75}>
+              <div className="group">
                 <ClipReveal
-                  direction="center"
-                  scaleFrom={1.1}
-                  delay={300}
-                  className="aspect-[4/3] overflow-hidden border border-[#F8F6F0]/15 sm:col-span-5"
+                  direction="bottom"
+                  scaleFrom={1.08}
+                  delay={150}
+                  className="aspect-[4/3] w-full overflow-hidden bg-[#183827]"
                 >
-                  <img
-                    src={dining.signatureHighlight.image}
-                    alt="Signature Maharaj Magadh Thali served at Auric 24×7 Restaurant"
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                    className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                  />
+                  <ParallaxMedia
+                    offset={18}
+                    scaleRange={[1.07, 1.01]}
+                    className="h-full w-full"
+                  >
+                    <img
+                      src={dining.signatureHighlight.image}
+                      alt="Signature Maharaj Magadh Thali served at Auric 24×7 Restaurant"
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                      className="h-full w-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+                    />
+                  </ParallaxMedia>
                 </ClipReveal>
-                <div className="sm:col-span-7">
-                  <p className="text-xs font-semibold tracking-[0.2em] text-[#C8A45D] uppercase">
-                    Signature Culinary Highlight
+
+                <div className="pt-6">
+                  <p className="text-[11px] font-medium tracking-[0.22em] text-[#C8A45D] uppercase">
+                    Signature Regional Heritage
                   </p>
-                  <h3 className="mt-1.5 font-serif text-2xl font-medium text-[#F8F6F0]">
+                  <h3 className="mt-2 font-serif text-3xl font-normal text-[#F8F6F0]">
                     {dining.signatureHighlight.name}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#F8F6F0]/75">
+                  <p className="mt-3 text-sm leading-[1.78] text-[#F8F6F0]/75">
                     {dining.signatureHighlight.description}
                   </p>
+                  <div className="mt-5">
+                    <a
+                      href={`${RESORT_CONFIG.contact.whatsappBaseUrl}?text=${encodeURIComponent(
+                        'Hello Auric 24×7 Restaurant at Narayana Green Resorts, I would like to enquire about dining and the Maharaj Magadh Thali.'
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-[11px] font-medium tracking-[0.16em] text-[#C8A45D] uppercase transition-colors hover:text-[#e5cfa0]"
+                    >
+                      <MessageCircle className="h-3.5 w-3.5" />
+                      <span className="border-b border-[#C8A45D]/40 pb-0.5">
+                        Enquire via WhatsApp for Thali & Menu
+                      </span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </Reveal>
+          </div>
+
+          {/* Right: 5 Verified Culinary Offerings as an Open Tasting Index */}
+          <div className="lg:col-span-7">
+            <Reveal delay={0}>
+              <p className="mb-4 text-[11px] font-medium tracking-[0.22em] text-[#C8A45D] uppercase">
+                Verified Culinary Hospitality
+              </p>
+            </Reveal>
+
+            <div className="divide-y divide-[#F8F6F0]/10 border-y border-[#F8F6F0]/10">
+              {dining.offerings.map((item, idx) => (
+                <Reveal
+                  key={item.id}
+                  delay={([0, 75, 150, 225, 300] as const)[idx % 5]}
+                  distance={14}
+                >
+                  <div className="group py-5 transition-colors duration-300 hover:bg-[#183827]/25 sm:px-3">
+                    <div className="flex items-baseline gap-4">
+                      <span className="font-mono text-xs font-normal text-[#C8A45D] tabular-nums">
+                        0{idx + 1}
+                      </span>
+                      <div>
+                        <h3 className="font-serif text-xl font-normal text-[#F8F6F0] transition-colors duration-300 group-hover:text-[#e5cfa0] sm:text-2xl">
+                          {item.title}
+                        </h3>
+                        <p className="mt-1.5 text-sm leading-[1.75] text-[#F8F6F0]/70">
+                          {item.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
           </div>
         </div>
       </Container>

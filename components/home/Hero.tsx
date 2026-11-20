@@ -6,6 +6,7 @@ import Link from 'next/link';
 import {
   motion,
   useScroll,
+  useSpring,
   useTransform,
 } from 'motion/react';
 import {
@@ -45,8 +46,15 @@ export function Hero() {
     offset: ['start start', 'end start'],
   });
 
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '12%']);
-  const bgOpacity = useTransform(scrollYProgress, [0, 1], [1, 0.72]);
+  const smoothScroll = useSpring(scrollYProgress, {
+    stiffness: 65,
+    damping: 24,
+    mass: 0.35,
+  });
+
+  const bgY = useTransform(smoothScroll, [0, 1], ['0%', '14%']);
+  const bgScale = useTransform(smoothScroll, [0, 1], [1, 1.06]);
+  const contentY = useTransform(smoothScroll, [0, 1], ['0%', '6%']);
 
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
@@ -58,6 +66,22 @@ export function Hero() {
   const effectiveCheckIn = checkIn || clientToday;
   const effectiveCheckOut =
     checkOut || (effectiveCheckIn ? getTomorrowIsoDate(effectiveCheckIn) : '');
+
+  React.useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    vid.addEventListener('play', handlePlay);
+    vid.addEventListener('pause', handlePause);
+    if (prefersReducedMotion && !vid.paused) {
+      vid.pause();
+    }
+    return () => {
+      vid.removeEventListener('play', handlePlay);
+      vid.removeEventListener('pause', handlePause);
+    };
+  }, [prefersReducedMotion]);
 
   const toggleVideoPlayback = () => {
     const vid = videoRef.current;
@@ -106,104 +130,109 @@ export function Hero() {
   return (
     <section
       ref={heroRef}
-      className="relative flex min-h-[88vh] flex-col justify-between overflow-hidden bg-[#0E2017] text-[#F8F6F0]"
+      className="relative flex min-h-[90vh] flex-col justify-between overflow-hidden bg-[#0E2017] text-[#F8F6F0]"
       aria-label="Narayana Green Resorts Hero Showcase"
     >
-      {/* Background Video + High-Res Poster Fallback with Cinematic Zoom-Out & Subtle Parallax */}
+      {/* Background Video + High-Res Poster with Slow Cinematic Zoom-Out & Spring Parallax */}
       <motion.div
-        style={disableParallax ? undefined : { y: bgY, opacity: bgOpacity }}
-        initial={prefersReducedMotion ? false : { scale: 1.12 }}
-        animate={{ scale: 1.03 }}
-        transition={{ duration: 1.6, ease: LUXURY_EASE }}
+        style={disableParallax ? undefined : { y: bgY, scale: bgScale }}
+        initial={prefersReducedMotion ? { opacity: 1, scale: 1 } : { scale: 1.11, opacity: 0.85 }}
+        animate={prefersReducedMotion ? { opacity: 1, scale: 1 } : { scale: 1.02, opacity: 1 }}
+        transition={prefersReducedMotion ? { duration: 0 } : { duration: 2.3, ease: LUXURY_EASE }}
         className="absolute inset-0 z-0 transform-gpu will-change-transform"
       >
         <video
           ref={videoRef}
-          autoPlay
+          autoPlay={!prefersReducedMotion}
           loop
           muted
           playsInline
           preload="metadata"
           poster={RESORT_CONFIG.heroMedia.posterSrc}
-          className="h-full w-full scale-[1.03] object-cover transition-transform duration-1000"
+          className="h-full w-full object-cover"
         >
           <source src={RESORT_CONFIG.heroMedia.videoSrc} type="video/mp4" />
         </video>
 
-        {/* Measured Multi-Stop Darkened Scrim Overlay for WCAG AA Readability */}
+        {/* Soft Multi-Stop Atmospheric Scrim for High Readability & Natural Depth */}
         <div
-          className="absolute inset-0 bg-gradient-to-b from-[#0E2017]/80 via-[#0E2017]/55 to-[#0E2017]/92"
+          className="absolute inset-0 bg-gradient-to-b from-[#0E2017]/75 via-[#0E2017]/40 to-[#0E2017]/92"
           aria-hidden="true"
         />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-[#0E2017]/75 via-[#0E2017]/30 to-transparent"
+          className="absolute inset-0 bg-gradient-to-r from-[#0E2017]/80 via-[#0E2017]/30 to-transparent"
           aria-hidden="true"
         />
       </motion.div>
 
       {/* Main Editorial Hero Content */}
-      <Container className="relative z-10 pt-16 pb-12 sm:pt-24 lg:pt-28">
-        <div className="flex flex-col justify-between gap-10 lg:flex-row lg:items-end">
+      <Container className="relative z-10 pt-20 pb-14 sm:pt-28 lg:pt-32 lg:pb-16">
+        <motion.div
+          style={disableParallax ? undefined : { y: contentY }}
+          className="flex flex-col justify-between gap-12 lg:flex-row lg:items-end"
+        >
           <div className="max-w-3xl">
-            {/* Clean Unboxed Eyebrow with Animated Hairline */}
+            {/* Quiet Unboxed Eyebrow with Animated Hairline */}
             <motion.div
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.05, ease: LUXURY_EASE }}
-              className="flex flex-wrap items-center gap-3 text-xs font-semibold tracking-[0.22em] text-[#C8A45D] uppercase"
+              transition={{ duration: 0.85, delay: 0.08, ease: LUXURY_EASE }}
+              className="flex flex-wrap items-center gap-3.5 text-[11px] font-medium tracking-[0.24em] text-[#C8A45D] uppercase"
             >
               <motion.span
                 initial={prefersReducedMotion ? false : { scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ duration: 0.7, delay: 0.12, ease: LUXURY_EASE }}
-                className="h-px w-8 origin-left bg-[#C8A45D]"
+                transition={{ duration: 0.9, delay: 0.16, ease: LUXURY_EASE }}
+                className="h-px w-10 origin-left bg-[#C8A45D]/80"
                 aria-hidden="true"
               />
               <span>{RESORT_CONFIG.name}</span>
-              <span aria-hidden="true" className="text-[#F8F6F0]/40">
+              <span aria-hidden="true" className="text-[#F8F6F0]/35">
                 ·
               </span>
-              <span className="text-[#F8F6F0]/85">{RESORT_CONFIG.locationTag}</span>
+              <span className="text-[#F8F6F0]/80">{RESORT_CONFIG.locationTag}</span>
             </motion.div>
 
-            {/* Primary Display Headline with Staggered Upward Reveal */}
+            {/* Primary Display Headline with Refined Lighter Editorial Serif */}
             <motion.h1
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 26 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, delay: 0.16, ease: LUXURY_EASE }}
-              className="mt-5 font-serif text-[clamp(2.35rem,4.5vw,4.1rem)] leading-[1.1] font-medium tracking-tight text-[#F8F6F0] [text-wrap:balance]"
+              transition={{ duration: 1.05, delay: 0.2, ease: LUXURY_EASE }}
+              className="mt-6 font-serif text-[clamp(2.5rem,4.7vw,4.45rem)] leading-[1.08] font-normal tracking-[-0.015em] text-[#F8F6F0] [text-wrap:balance]"
             >
-              {RESORT_CONFIG.heroHeadline}
+              Escape to Green.{' '}
+              <span className="italic font-normal text-[#e5cfa0]">Stay in Comfort.</span>{' '}
+              Celebrate in Style.
             </motion.h1>
 
-            {/* Supporting Copy Fade-In */}
+            {/* Supporting Copy Progressive Fade-In */}
             <motion.p
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.3, ease: LUXURY_EASE }}
-              className="mt-6 max-w-2xl text-base leading-relaxed text-[#F8F6F0]/85 sm:text-lg"
+              transition={{ duration: 0.95, delay: 0.36, ease: LUXURY_EASE }}
+              className="mt-7 max-w-2xl text-[15px] leading-[1.8] font-light text-[#F8F6F0]/82 sm:text-[17px]"
             >
               {RESORT_CONFIG.heroSupportingCopy}
             </motion.p>
 
-            {/* Primary & Secondary Action Row */}
+            {/* Primary & Secondary Action Row with Staggered Reveal */}
             <motion.div
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.42, ease: LUXURY_EASE }}
-              className="mt-9 flex flex-wrap items-center gap-4"
+              transition={{ duration: 0.95, delay: 0.5, ease: LUXURY_EASE }}
+              className="mt-10 flex flex-wrap items-center gap-4"
             >
               <Link
                 href="/contact#booking-enquiry"
-                className="group inline-flex items-center justify-center gap-2.5 bg-[#C8A45D] px-8 py-4 text-xs font-semibold tracking-[0.15em] text-[#0E2017] uppercase whitespace-nowrap shrink-0 transition-colors duration-200 hover:bg-[#d6b36c]"
+                className="group inline-flex items-center justify-center gap-3 bg-[#C8A45D] px-8 py-4 text-[11px] font-medium tracking-[0.18em] text-[#0E2017] uppercase whitespace-nowrap shrink-0 transition-all duration-300 hover:bg-[#d6b36c] hover:shadow-[0_10px_28px_rgba(200,164,93,0.28)]"
               >
                 <span>Book Your Stay</span>
-                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" />
               </Link>
 
               <a
                 href="#resort-intro"
-                className="inline-flex items-center justify-center gap-2.5 border border-[#F8F6F0]/40 bg-[#0E2017]/40 px-8 py-4 text-xs font-semibold tracking-[0.15em] text-[#F8F6F0] uppercase whitespace-nowrap shrink-0 backdrop-blur-xs transition-colors duration-200 hover:border-[#C8A45D] hover:text-[#C8A45D]"
+                className="inline-flex items-center justify-center gap-2.5 border border-[#F8F6F0]/25 bg-[#0E2017]/35 px-8 py-4 text-[11px] font-medium tracking-[0.18em] text-[#F8F6F0] uppercase whitespace-nowrap shrink-0 backdrop-blur-sm transition-all duration-300 hover:border-[#C8A45D]/80 hover:bg-[#0E2017]/60 hover:text-[#C8A45D]"
               >
                 <Compass className="h-4 w-4 text-[#C8A45D]" />
                 <span>Explore Resort</span>
@@ -213,17 +242,17 @@ export function Hero() {
               <button
                 type="button"
                 onClick={toggleVideoPlayback}
-                className="ml-auto inline-flex items-center gap-2 border border-[#F8F6F0]/20 bg-[#0E2017]/60 px-3.5 py-2.5 text-[11px] font-medium tracking-wider text-[#F8F6F0]/80 uppercase transition-colors hover:border-[#C8A45D] hover:text-[#C8A45D] cursor-pointer"
+                className="ml-auto inline-flex items-center gap-2 border border-[#F8F6F0]/15 bg-[#0E2017]/45 px-4 py-2.5 text-[10px] font-normal tracking-[0.18em] text-[#F8F6F0]/75 uppercase backdrop-blur-sm transition-colors duration-300 hover:border-[#C8A45D]/70 hover:text-[#C8A45D] cursor-pointer"
                 aria-label={isPlaying ? 'Pause background video' : 'Play background video'}
               >
                 {isPlaying ? (
                   <>
-                    <Pause className="h-3.5 w-3.5 text-[#C8A45D]" />
+                    <Pause className="h-3 w-3 text-[#C8A45D]" />
                     <span className="hidden sm:inline">Pause Film</span>
                   </>
                 ) : (
                   <>
-                    <Play className="h-3.5 w-3.5 text-[#C8A45D]" />
+                    <Play className="h-3 w-3 text-[#C8A45D]" />
                     <span className="hidden sm:inline">Play Film</span>
                   </>
                 )}
@@ -231,52 +260,54 @@ export function Hero() {
             </motion.div>
           </div>
 
-          {/* Elegant Scroll Indicator */}
+          {/* Refined Minimalist Scroll Indicator */}
           <motion.a
             href="#resort-intro"
             aria-label="Scroll down to discover the resort"
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.6, ease: LUXURY_EASE }}
-            className="hidden shrink-0 flex-col items-center gap-2.5 text-[10px] font-semibold tracking-[0.22em] text-[#F8F6F0]/75 uppercase transition-colors hover:text-[#C8A45D] lg:flex"
+            transition={{ duration: 0.95, delay: 0.68, ease: LUXURY_EASE }}
+            className="group hidden shrink-0 flex-col items-center gap-3 text-[10px] font-normal tracking-[0.26em] text-[#F8F6F0]/65 uppercase transition-colors duration-300 hover:text-[#C8A45D] lg:flex"
           >
-            <span className="[writing-mode:vertical-rl]">Scroll to Explore</span>
-            <span className="relative flex h-12 w-px overflow-hidden bg-[#F8F6F0]/25" aria-hidden="true">
-              <motion.span
-                animate={{ y: ['-100%', '100%'] }}
-                transition={{
-                  duration: 1.8,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-                className="h-1/2 w-full bg-[#C8A45D] motion-reduce:hidden"
-              />
+            <span className="[writing-mode:vertical-rl]">Discover</span>
+            <span className="relative flex h-14 w-px overflow-hidden bg-[#F8F6F0]/20" aria-hidden="true">
+              {!prefersReducedMotion && (
+                <motion.span
+                  animate={{ y: ['-100%', '100%'] }}
+                  transition={{
+                    duration: 2.2,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                  className="h-1/2 w-full bg-[#C8A45D] motion-reduce:hidden"
+                />
+              )}
             </span>
-            <ChevronDown className="h-3.5 w-3.5 text-[#C8A45D]" />
+            <ChevronDown className="h-3.5 w-3.5 text-[#C8A45D]/80 transition-transform duration-300 group-hover:translate-y-0.5" />
           </motion.a>
-        </div>
+        </motion.div>
       </Container>
 
-      {/* Bottom Compact Booking Enquiry Widget + Verified Resort Facts Strip */}
-      <div className="relative z-10 border-t border-[#F8F6F0]/15 bg-[#0E2017]/90 backdrop-blur-md">
-        <Container className="py-6">
+      {/* Bottom Architectural Booking Enquiry Ribbon */}
+      <div className="relative z-10 border-t border-[#F8F6F0]/12 bg-[#0E2017]/82 backdrop-blur-xl">
+        <Container className="py-5 lg:py-6">
           <motion.div
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.5, ease: LUXURY_EASE }}
+            transition={{ duration: 0.95, delay: 0.58, ease: LUXURY_EASE }}
           >
             <form
               onSubmit={handleWidgetSubmit}
               aria-label="Quick Stay Enquiry Widget"
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:items-end"
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:items-center lg:gap-0 lg:divide-x lg:divide-[#F8F6F0]/12"
             >
               {/* Check-in */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-2 lg:pr-5">
                 <label
                   htmlFor="hero-checkin"
-                  className="flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.15em] text-[#C8A45D] uppercase"
+                  className="flex items-center gap-1.5 text-[10px] font-medium tracking-[0.2em] text-[#C8A45D] uppercase"
                 >
-                  <Calendar className="h-3.5 w-3.5" />
+                  <Calendar className="h-3 w-3" />
                   <span>Check-In</span>
                 </label>
                 <input
@@ -285,17 +316,17 @@ export function Hero() {
                   min={clientToday || undefined}
                   value={effectiveCheckIn}
                   onChange={(e) => handleCheckInChange(e.target.value)}
-                  className="mt-1.5 w-full border border-[#F8F6F0]/20 bg-[#183827]/70 px-3.5 py-2.5 font-mono text-xs text-[#F8F6F0] focus:border-[#C8A45D] focus:outline-none"
+                  className="mt-1.5 w-full border-b border-[#F8F6F0]/15 bg-transparent py-1.5 font-mono text-xs text-[#F8F6F0] transition-colors focus:border-[#C8A45D] focus:outline-none"
                 />
               </div>
 
               {/* Check-out */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-2 lg:px-5">
                 <label
                   htmlFor="hero-checkout"
-                  className="flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.15em] text-[#C8A45D] uppercase"
+                  className="flex items-center gap-1.5 text-[10px] font-medium tracking-[0.2em] text-[#C8A45D] uppercase"
                 >
-                  <Calendar className="h-3.5 w-3.5" />
+                  <Calendar className="h-3 w-3" />
                   <span>Check-Out</span>
                 </label>
                 <input
@@ -307,24 +338,24 @@ export function Hero() {
                     setCheckOut(e.target.value);
                     setDateError('');
                   }}
-                  className="mt-1.5 w-full border border-[#F8F6F0]/20 bg-[#183827]/70 px-3.5 py-2.5 font-mono text-xs text-[#F8F6F0] focus:border-[#C8A45D] focus:outline-none"
+                  className="mt-1.5 w-full border-b border-[#F8F6F0]/15 bg-transparent py-1.5 font-mono text-xs text-[#F8F6F0] transition-colors focus:border-[#C8A45D] focus:outline-none"
                 />
               </div>
 
               {/* Adults */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-2 lg:px-5">
                 <label
                   htmlFor="hero-adults"
-                  className="flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.15em] text-[#C8A45D] uppercase"
+                  className="flex items-center gap-1.5 text-[10px] font-medium tracking-[0.2em] text-[#C8A45D] uppercase"
                 >
-                  <Users className="h-3.5 w-3.5" />
+                  <Users className="h-3 w-3" />
                   <span>Adults</span>
                 </label>
                 <select
                   id="hero-adults"
                   value={adults}
                   onChange={(e) => setAdults(Number(e.target.value))}
-                  className="mt-1.5 w-full border border-[#F8F6F0]/20 bg-[#183827]/70 px-3.5 py-2.5 text-xs text-[#F8F6F0] focus:border-[#C8A45D] focus:outline-none"
+                  className="mt-1.5 w-full border-b border-[#F8F6F0]/15 bg-transparent py-1.5 text-xs text-[#F8F6F0] transition-colors focus:border-[#C8A45D] focus:outline-none"
                 >
                   {[1, 2, 3, 4, 5, 6, 8, 10].map((n) => (
                     <option key={n} value={n} className="bg-[#0E2017] text-[#F8F6F0]">
@@ -335,10 +366,10 @@ export function Hero() {
               </div>
 
               {/* Children */}
-              <div className="lg:col-span-1">
+              <div className="lg:col-span-1 lg:px-4">
                 <label
                   htmlFor="hero-children"
-                  className="flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.15em] text-[#C8A45D] uppercase"
+                  className="flex items-center gap-1.5 text-[10px] font-medium tracking-[0.2em] text-[#C8A45D] uppercase"
                 >
                   <span>Children</span>
                 </label>
@@ -346,7 +377,7 @@ export function Hero() {
                   id="hero-children"
                   value={children}
                   onChange={(e) => setChildren(Number(e.target.value))}
-                  className="mt-1.5 w-full border border-[#F8F6F0]/20 bg-[#183827]/70 px-3 py-2.5 text-xs text-[#F8F6F0] focus:border-[#C8A45D] focus:outline-none"
+                  className="mt-1.5 w-full border-b border-[#F8F6F0]/15 bg-transparent py-1.5 text-xs text-[#F8F6F0] transition-colors focus:border-[#C8A45D] focus:outline-none"
                 >
                   {[0, 1, 2, 3, 4].map((n) => (
                     <option key={n} value={n} className="bg-[#0E2017] text-[#F8F6F0]">
@@ -357,19 +388,19 @@ export function Hero() {
               </div>
 
               {/* Room Preference */}
-              <div className="lg:col-span-3">
+              <div className="lg:col-span-3 lg:px-5">
                 <label
                   htmlFor="hero-room"
-                  className="flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.15em] text-[#C8A45D] uppercase"
+                  className="flex items-center gap-1.5 text-[10px] font-medium tracking-[0.2em] text-[#C8A45D] uppercase"
                 >
-                  <BedDouble className="h-3.5 w-3.5" />
-                  <span>Room Preference</span>
+                  <BedDouble className="h-3 w-3" />
+                  <span>Accommodation</span>
                 </label>
                 <select
                   id="hero-room"
                   value={roomPreference}
                   onChange={(e) => setRoomPreference(e.target.value)}
-                  className="mt-1.5 w-full border border-[#F8F6F0]/20 bg-[#183827]/70 px-3.5 py-2.5 text-xs text-[#F8F6F0] focus:border-[#C8A45D] focus:outline-none"
+                  className="mt-1.5 w-full border-b border-[#F8F6F0]/15 bg-transparent py-1.5 text-xs text-[#F8F6F0] transition-colors focus:border-[#C8A45D] focus:outline-none"
                 >
                   {ROOM_CATEGORIES.map((room) => (
                     <option
@@ -384,10 +415,10 @@ export function Hero() {
               </div>
 
               {/* Submit Enquiry Button */}
-              <div className="sm:col-span-2 lg:col-span-2">
+              <div className="sm:col-span-2 lg:col-span-2 lg:pl-5">
                 <button
                   type="submit"
-                  className="w-full bg-[#C8A45D] px-4 py-2.5 text-xs font-semibold tracking-[0.13em] text-[#0E2017] uppercase whitespace-nowrap shrink-0 transition-colors hover:bg-[#d6b36c] cursor-pointer"
+                  className="w-full border border-[#C8A45D] bg-[#C8A45D] px-4 py-3 text-[11px] font-medium tracking-[0.16em] text-[#0E2017] uppercase whitespace-nowrap shrink-0 transition-all duration-300 hover:bg-[#d6b36c] cursor-pointer"
                 >
                   Check Availability
                 </button>
@@ -395,28 +426,28 @@ export function Hero() {
             </form>
 
             {dateError && (
-              <p className="mt-2 text-xs text-[#C8A45D]" role="alert">
+              <p className="mt-2.5 text-xs text-[#C8A45D]" role="alert">
                 {dateError}
               </p>
             )}
 
-            {/* Unboxed Metadata Bar Below Widget */}
-            <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-[#F8F6F0]/10 pt-4 text-xs text-[#F8F6F0]/75">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="font-mono font-semibold text-[#C8A45D] tabular-nums">
-                  19 Verified Units
+            {/* Quiet Unboxed Portfolio Metadata Strip */}
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-t border-[#F8F6F0]/8 pt-3.5 text-[11px] text-[#F8F6F0]/65">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="font-mono text-[#C8A45D] tabular-nums">
+                  19 Curated Units
                 </span>
-                <span aria-hidden="true">·</span>
+                <span aria-hidden="true" className="text-[#F8F6F0]/30">·</span>
                 <span>2 Suites</span>
-                <span aria-hidden="true">·</span>
+                <span aria-hidden="true" className="text-[#F8F6F0]/30">·</span>
                 <span>3 Cottages</span>
-                <span aria-hidden="true">·</span>
+                <span aria-hidden="true" className="text-[#F8F6F0]/30">·</span>
                 <span>6 Pool-View</span>
-                <span aria-hidden="true">·</span>
+                <span aria-hidden="true" className="text-[#F8F6F0]/30">·</span>
                 <span>8 Garden-View</span>
               </div>
-              <p className="text-[11px] text-[#F8F6F0]/65">
-                Direct Resort Enquiry · Rates & availability confirmed personally by our front desk
+              <p className="text-[11px] font-light text-[#F8F6F0]/55">
+                Direct Resort Concierge · Availability & tariffs confirmed personally by our front desk
               </p>
             </div>
           </motion.div>
