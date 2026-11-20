@@ -165,8 +165,29 @@ export function Hero() {
         />
       </motion.div>
 
-      {/* Main Editorial Hero Content — Balanced directly below sticky Header with zero redundant top offset */}
+      {/* Top-Right Corner Ambient Video Control on Mobile/Tablet & Bottom-Right Corner on Desktop */}
       <Container className="relative z-10 flex flex-1 flex-col justify-center pt-5 pb-6 sm:pt-7 sm:pb-8 lg:py-7 xl:py-9">
+        <div className="mb-3 flex justify-end lg:hidden">
+          <button
+            type="button"
+            onClick={toggleVideoPlayback}
+            className="inline-flex items-center gap-2 border border-[#F8F6F0]/15 bg-[#0E2017]/55 px-3 py-2 text-[10px] font-normal tracking-[0.18em] text-[#F8F6F0]/80 uppercase backdrop-blur-md transition-colors duration-300 hover:border-[#C8A45D]/70 hover:text-[#C8A45D] cursor-pointer"
+            aria-label={isPlaying ? 'Pause background video' : 'Play background video'}
+          >
+            {isPlaying ? (
+              <>
+                <Pause className="h-3 w-3 text-[#C8A45D]" />
+                <span>Pause Film</span>
+              </>
+            ) : (
+              <>
+                <Play className="h-3 w-3 text-[#C8A45D]" />
+                <span>Play Film</span>
+              </>
+            )}
+          </button>
+        </div>
+
         <motion.div
           style={disableParallax ? undefined : { y: contentY }}
           className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end lg:gap-12"
@@ -237,54 +258,58 @@ export function Hero() {
                 <Compass className="h-4 w-4 text-[#C8A45D]" />
                 <span>Explore Resort</span>
               </a>
-
-              {/* Ambient Video Pause/Play Accessibility Control */}
-              <button
-                type="button"
-                onClick={toggleVideoPlayback}
-                className="ml-auto inline-flex items-center gap-2 border border-[#F8F6F0]/15 bg-[#0E2017]/45 px-3.5 py-2.5 text-[10px] font-normal tracking-[0.18em] text-[#F8F6F0]/75 uppercase backdrop-blur-sm transition-colors duration-300 hover:border-[#C8A45D]/70 hover:text-[#C8A45D] cursor-pointer sm:px-4"
-                aria-label={isPlaying ? 'Pause background video' : 'Play background video'}
-              >
-                {isPlaying ? (
-                  <>
-                    <Pause className="h-3 w-3 text-[#C8A45D]" />
-                    <span className="hidden sm:inline">Pause Film</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="h-3 w-3 text-[#C8A45D]" />
-                    <span className="hidden sm:inline">Play Film</span>
-                  </>
-                )}
-              </button>
             </motion.div>
           </div>
 
-          {/* Refined Minimalist Scroll Indicator */}
-          <motion.a
-            href="#resort-intro"
-            aria-label="Scroll down to discover the resort"
+          {/* Right-Corner Architectural Controls: Scroll Indicator + Ambient Video Pause/Play */}
+          <motion.div
             initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.95, delay: 0.68, ease: LUXURY_EASE }}
-            className="group hidden shrink-0 flex-col items-center gap-2.5 text-[10px] font-normal tracking-[0.26em] text-[#F8F6F0]/65 uppercase transition-colors duration-300 hover:text-[#C8A45D] lg:flex"
+            className="hidden shrink-0 flex-col items-end gap-5 lg:flex"
           >
-            <span className="[writing-mode:vertical-rl]">Discover</span>
-            <span className="relative flex h-12 w-px overflow-hidden bg-[#F8F6F0]/20" aria-hidden="true">
-              {!prefersReducedMotion && (
-                <motion.span
-                  animate={{ y: ['-100%', '100%'] }}
-                  transition={{
-                    duration: 2.2,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
-                  className="h-1/2 w-full bg-[#C8A45D] motion-reduce:hidden"
-                />
+            <a
+              href="#resort-intro"
+              aria-label="Scroll down to discover the resort"
+              className="group flex flex-col items-center gap-2.5 pr-2 text-[10px] font-normal tracking-[0.26em] text-[#F8F6F0]/65 uppercase transition-colors duration-300 hover:text-[#C8A45D]"
+            >
+              <span className="[writing-mode:vertical-rl]">Discover</span>
+              <span className="relative flex h-12 w-px overflow-hidden bg-[#F8F6F0]/20" aria-hidden="true">
+                {!prefersReducedMotion && (
+                  <motion.span
+                    animate={{ y: ['-100%', '100%'] }}
+                    transition={{
+                      duration: 2.2,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    }}
+                    className="h-1/2 w-full bg-[#C8A45D] motion-reduce:hidden"
+                  />
+                )}
+              </span>
+              <ChevronDown className="h-3.5 w-3.5 text-[#C8A45D]/80 transition-transform duration-300 group-hover:translate-y-0.5" />
+            </a>
+
+            {/* Ambient Video Pause/Play Accessibility Control — Positioned cleanly in the bottom-right corner */}
+            <button
+              type="button"
+              onClick={toggleVideoPlayback}
+              className="inline-flex items-center gap-2 border border-[#F8F6F0]/15 bg-[#0E2017]/50 px-3.5 py-2 text-[10px] font-normal tracking-[0.18em] text-[#F8F6F0]/80 uppercase backdrop-blur-md transition-all duration-300 hover:border-[#C8A45D]/70 hover:bg-[#0E2017]/75 hover:text-[#C8A45D] cursor-pointer"
+              aria-label={isPlaying ? 'Pause background video' : 'Play background video'}
+            >
+              {isPlaying ? (
+                <>
+                  <Pause className="h-3 w-3 text-[#C8A45D]" />
+                  <span>Pause Film</span>
+                </>
+              ) : (
+                <>
+                  <Play className="h-3 w-3 text-[#C8A45D]" />
+                  <span>Play Film</span>
+                </>
               )}
-            </span>
-            <ChevronDown className="h-3.5 w-3.5 text-[#C8A45D]/80 transition-transform duration-300 group-hover:translate-y-0.5" />
-          </motion.a>
+            </button>
+          </motion.div>
         </motion.div>
       </Container>
 
