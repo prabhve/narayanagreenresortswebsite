@@ -65,7 +65,7 @@ export default function RootLayout({
         />
         <MotionProvider>
           <Header />
-          <main className="min-h-[calc(100vh-5rem)]">
+          <main className="min-h-[calc(100svh-4rem)] sm:min-h-[calc(100svh-4.5rem)] lg:min-h-[calc(100svh-4.75rem)]">
             <PageTransition>{children}</PageTransition>
           </main>
           <Footer />

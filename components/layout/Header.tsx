@@ -50,7 +50,7 @@ export function Header() {
             : 'border-b border-[#F8F6F0]/8 bg-[#0E2017]/88 backdrop-blur-md'
         }`}
       >
-        <div className="mx-auto flex h-20 max-w-[1360px] items-center justify-between gap-8 px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto flex h-16 max-w-[1360px] items-center justify-between gap-6 px-5 sm:h-[4.5rem] sm:gap-8 sm:px-8 lg:h-[4.75rem] lg:px-12">
           {/* Zone 1: Brand Title */}
           <Link
             href="/"

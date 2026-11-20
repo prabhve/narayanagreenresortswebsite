@@ -130,7 +130,7 @@ export function Hero() {
   return (
     <section
       ref={heroRef}
-      className="relative flex min-h-[90vh] flex-col justify-between overflow-hidden bg-[#0E2017] text-[#F8F6F0]"
+      className="relative flex min-h-[calc(100svh-4rem)] flex-col justify-between overflow-hidden bg-[#0E2017] text-[#F8F6F0] sm:min-h-[calc(100svh-4.5rem)] lg:min-h-[calc(100svh-4.75rem)]"
       aria-label="Narayana Green Resorts Hero Showcase"
     >
       {/* Background Video + High-Res Poster with Slow Cinematic Zoom-Out & Spring Parallax */}
@@ -165,11 +165,11 @@ export function Hero() {
         />
       </motion.div>
 
-      {/* Main Editorial Hero Content */}
-      <Container className="relative z-10 pt-20 pb-14 sm:pt-28 lg:pt-32 lg:pb-16">
+      {/* Main Editorial Hero Content — Balanced directly below sticky Header with zero redundant top offset */}
+      <Container className="relative z-10 flex flex-1 flex-col justify-center pt-5 pb-6 sm:pt-7 sm:pb-8 lg:py-7 xl:py-9">
         <motion.div
           style={disableParallax ? undefined : { y: contentY }}
-          className="flex flex-col justify-between gap-12 lg:flex-row lg:items-end"
+          className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end lg:gap-12"
         >
           <div className="max-w-3xl">
             {/* Quiet Unboxed Eyebrow with Animated Hairline */}
@@ -177,13 +177,13 @@ export function Hero() {
               initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.08, ease: LUXURY_EASE }}
-              className="flex flex-wrap items-center gap-3.5 text-[11px] font-medium tracking-[0.24em] text-[#C8A45D] uppercase"
+              className="flex flex-wrap items-center gap-3 text-[11px] font-medium tracking-[0.24em] text-[#C8A45D] uppercase sm:gap-3.5"
             >
               <motion.span
                 initial={prefersReducedMotion ? false : { scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 0.9, delay: 0.16, ease: LUXURY_EASE }}
-                className="h-px w-10 origin-left bg-[#C8A45D]/80"
+                className="h-px w-8 origin-left bg-[#C8A45D]/80 sm:w-10"
                 aria-hidden="true"
               />
               <span>{RESORT_CONFIG.name}</span>
@@ -198,7 +198,7 @@ export function Hero() {
               initial={prefersReducedMotion ? false : { opacity: 0, y: 26 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.05, delay: 0.2, ease: LUXURY_EASE }}
-              className="mt-6 font-serif text-[clamp(2.5rem,4.7vw,4.45rem)] leading-[1.08] font-normal tracking-[-0.015em] text-[#F8F6F0] [text-wrap:balance]"
+              className="mt-3.5 font-serif text-[clamp(2.15rem,4.1vw,4.1rem)] leading-[1.07] font-normal tracking-[-0.015em] text-[#F8F6F0] [text-wrap:balance] sm:mt-4 lg:mt-4"
             >
               Escape to Green.{' '}
               <span className="italic font-normal text-[#e5cfa0]">Stay in Comfort.</span>{' '}
@@ -210,7 +210,7 @@ export function Hero() {
               initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, delay: 0.36, ease: LUXURY_EASE }}
-              className="mt-7 max-w-2xl text-[15px] leading-[1.8] font-light text-[#F8F6F0]/82 sm:text-[17px]"
+              className="mt-3.5 max-w-2xl text-[14.5px] leading-[1.7] font-light text-[#F8F6F0]/84 sm:mt-4 sm:text-[15.5px] lg:mt-4 lg:text-[16px] lg:leading-[1.75]"
             >
               {RESORT_CONFIG.heroSupportingCopy}
             </motion.p>
@@ -220,11 +220,11 @@ export function Hero() {
               initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, delay: 0.5, ease: LUXURY_EASE }}
-              className="mt-10 flex flex-wrap items-center gap-4"
+              className="mt-5 flex flex-wrap items-center gap-3.5 sm:mt-6 sm:gap-4 lg:mt-7"
             >
               <Link
                 href="/contact#booking-enquiry"
-                className="group inline-flex items-center justify-center gap-3 bg-[#C8A45D] px-8 py-4 text-[11px] font-medium tracking-[0.18em] text-[#0E2017] uppercase whitespace-nowrap shrink-0 transition-all duration-300 hover:bg-[#d6b36c] hover:shadow-[0_10px_28px_rgba(200,164,93,0.28)]"
+                className="group inline-flex items-center justify-center gap-3 bg-[#C8A45D] px-6 py-3.5 text-[11px] font-medium tracking-[0.18em] text-[#0E2017] uppercase whitespace-nowrap shrink-0 transition-all duration-300 hover:bg-[#d6b36c] hover:shadow-[0_10px_28px_rgba(200,164,93,0.28)] sm:px-7 sm:py-3.5"
               >
                 <span>Book Your Stay</span>
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" />
@@ -232,7 +232,7 @@ export function Hero() {
 
               <a
                 href="#resort-intro"
-                className="inline-flex items-center justify-center gap-2.5 border border-[#F8F6F0]/25 bg-[#0E2017]/35 px-8 py-4 text-[11px] font-medium tracking-[0.18em] text-[#F8F6F0] uppercase whitespace-nowrap shrink-0 backdrop-blur-sm transition-all duration-300 hover:border-[#C8A45D]/80 hover:bg-[#0E2017]/60 hover:text-[#C8A45D]"
+                className="inline-flex items-center justify-center gap-2.5 border border-[#F8F6F0]/25 bg-[#0E2017]/35 px-6 py-3.5 text-[11px] font-medium tracking-[0.18em] text-[#F8F6F0] uppercase whitespace-nowrap shrink-0 backdrop-blur-sm transition-all duration-300 hover:border-[#C8A45D]/80 hover:bg-[#0E2017]/60 hover:text-[#C8A45D] sm:px-7 sm:py-3.5"
               >
                 <Compass className="h-4 w-4 text-[#C8A45D]" />
                 <span>Explore Resort</span>
@@ -242,7 +242,7 @@ export function Hero() {
               <button
                 type="button"
                 onClick={toggleVideoPlayback}
-                className="ml-auto inline-flex items-center gap-2 border border-[#F8F6F0]/15 bg-[#0E2017]/45 px-4 py-2.5 text-[10px] font-normal tracking-[0.18em] text-[#F8F6F0]/75 uppercase backdrop-blur-sm transition-colors duration-300 hover:border-[#C8A45D]/70 hover:text-[#C8A45D] cursor-pointer"
+                className="ml-auto inline-flex items-center gap-2 border border-[#F8F6F0]/15 bg-[#0E2017]/45 px-3.5 py-2.5 text-[10px] font-normal tracking-[0.18em] text-[#F8F6F0]/75 uppercase backdrop-blur-sm transition-colors duration-300 hover:border-[#C8A45D]/70 hover:text-[#C8A45D] cursor-pointer sm:px-4"
                 aria-label={isPlaying ? 'Pause background video' : 'Play background video'}
               >
                 {isPlaying ? (
@@ -267,10 +267,10 @@ export function Hero() {
             initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.95, delay: 0.68, ease: LUXURY_EASE }}
-            className="group hidden shrink-0 flex-col items-center gap-3 text-[10px] font-normal tracking-[0.26em] text-[#F8F6F0]/65 uppercase transition-colors duration-300 hover:text-[#C8A45D] lg:flex"
+            className="group hidden shrink-0 flex-col items-center gap-2.5 text-[10px] font-normal tracking-[0.26em] text-[#F8F6F0]/65 uppercase transition-colors duration-300 hover:text-[#C8A45D] lg:flex"
           >
             <span className="[writing-mode:vertical-rl]">Discover</span>
-            <span className="relative flex h-14 w-px overflow-hidden bg-[#F8F6F0]/20" aria-hidden="true">
+            <span className="relative flex h-12 w-px overflow-hidden bg-[#F8F6F0]/20" aria-hidden="true">
               {!prefersReducedMotion && (
                 <motion.span
                   animate={{ y: ['-100%', '100%'] }}
@@ -290,7 +290,7 @@ export function Hero() {
 
       {/* Bottom Architectural Booking Enquiry Ribbon */}
       <div className="relative z-10 border-t border-[#F8F6F0]/12 bg-[#0E2017]/82 backdrop-blur-xl">
-        <Container className="py-5 lg:py-6">
+        <Container className="py-3.5 sm:py-4 lg:py-4">
           <motion.div
             initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -299,7 +299,7 @@ export function Hero() {
             <form
               onSubmit={handleWidgetSubmit}
               aria-label="Quick Stay Enquiry Widget"
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:items-center lg:gap-0 lg:divide-x lg:divide-[#F8F6F0]/12"
+              className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-12 lg:items-center lg:gap-0 lg:divide-x lg:divide-[#F8F6F0]/12"
             >
               {/* Check-in */}
               <div className="lg:col-span-2 lg:pr-5">
