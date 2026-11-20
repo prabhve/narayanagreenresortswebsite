@@ -10,6 +10,7 @@ import { MotionProvider } from '@/components/layout/MotionProvider';
 import { BackToTopButton } from '@/components/ui/MotionPrimitives';
 import { AnalyticsScripts } from '@/components/seo/AnalyticsScripts';
 import { constructPageMetadata, getLodgingStructuredData } from '@/lib/seo';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -72,6 +73,7 @@ export default function RootLayout({
           <BackToTopButton />
           <MobileStickyCTA />
         </MotionProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
