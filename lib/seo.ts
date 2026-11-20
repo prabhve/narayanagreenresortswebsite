@@ -46,8 +46,27 @@ export function constructPageMetadata({
   const absoluteImage = image.startsWith('http') ? image : `${baseUrl}${image}`;
   const isPreview = isPreviewDeployment();
 
-  const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
-  const bingVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION?.trim();
+  const rawGoogleVerification = (
+    process.env.GOOGLE_SITE_VERIFICATION ||
+    process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
+    ''
+  ).trim();
+  const rawBingVerification = (
+    process.env.BING_SITE_VERIFICATION ||
+    process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ||
+    ''
+  ).trim();
+
+  const isPlaceholderValue = (val: string) =>
+    !val ||
+    /^(your_|placeholder|example|test|dummy|xxx|todo|none|null|undefined)/i.test(val);
+
+  const googleVerification = isPlaceholderValue(rawGoogleVerification)
+    ? ''
+    : rawGoogleVerification;
+  const bingVerification = isPlaceholderValue(rawBingVerification)
+    ? ''
+    : rawBingVerification;
 
   const defaultKeywords = [
     'Narayana Green Resorts',
